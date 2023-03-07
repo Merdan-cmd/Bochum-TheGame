@@ -5,7 +5,7 @@ class Player {
   constructor({ image }) {
     this.position = {
       x: 100,
-      y: 475,
+      y: 479,
     };
     this.velocity = {
       x: 0,

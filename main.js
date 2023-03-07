@@ -1,10 +1,13 @@
-import gegner1 from "./assets/Gegner-1.png";
+import frauRosaKleid from "./assets/Frau__Kleid.png";
+import kunststudent from "./assets/Kunststudent.png";
 import platform from "./assets/Steig.png";
 import hintergrund from "./assets/Hintergrund.png";
 import dach from "./assets/Dach.png";
-import zug from "./assets/Zug.png";
+import sbahn from "./assets/S-BAHN.png";
+import automatUkraine from "./assets/Automat__Ukraine.png";
+import rrx from "./assets/Zug.png";
 import gleise from "./assets/Gleise.png";
-import playerPic from "./assets/Hat_man1.png";
+import assi from "./assets/Hat_man1.png";
 
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
@@ -27,27 +30,53 @@ function createImage(imageSrc) {
   return image;
 }
 
-let player = new Player({ image: createImage(playerPic) });
+let player = new Player({ image: createImage(kunststudent) });
 let scrollOffset = 0;
 
+// ENEMIES
+// ENEMIES
+// ENEMIES
+// ENEMIES
+// ENEMIES
+// ENEMIES
+// ENEMIES
 let enemies = [
   new Enemy({
-    x: 900,
-    y: 476,
-    image: createImage(gegner1),
+    x: 1200,
+    y: 479,
+    image: createImage(frauRosaKleid),
+    velocity: -1,
+  }),
+
+  new Enemy({
+    x: 2500,
+    y: 478,
+    image: createImage(assi),
     velocity: -1,
   }),
   new Enemy({
-    x: 1200,
-    y: 476,
-    image: createImage(gegner1),
+    x: 2000,
+    y: 478,
+    image: createImage(assi),
     velocity: 1,
   }),
 ];
-// Platfoms
+
+//PLATFORMS
+//PLATFORMS
+//PLATFORMS
+//PLATFORMS
+//PLATFORMS
+//PLATFORMS
+//PLATFORMS
+//PLATFORMS
+//PLATFORMS
+//PLATFORMS
+
 let platformImage = createImage(platform);
 
 let platforms = [
+  new Platform({ x: 2910, y: 423, image: createImage(sbahn) }),
   new Platform({ x: -1, y: 549, image: platformImage }),
 
   new Platform({
@@ -55,7 +84,7 @@ let platforms = [
     y: 549,
     image: platformImage,
   }),
-  new Platform({ x: 0, y: 417, image: createImage(zug) }),
+  new Platform({ x: 0, y: 417, image: createImage(rrx) }),
   new Platform({ x: 499, y: 317, image: createImage(dach) }),
 ];
 let genericObjects = [
@@ -68,31 +97,70 @@ let genericObjects = [
 
 let genericForegroundObjects = [
   new GenericForeground({ x: 0, y: 620, image: createImage(gleise) }),
+  new GenericForeground({
+    x: 1041,
+    y: 445,
+    image: createImage(automatUkraine),
+  }),
 ];
 
 // ####################
+// ####################
+// ####################
+// ####################
+// ####################
+// ####################
+// ####################
+// ####################
+// ####################
+// ####################
+// ####################
+// ####################
 function init() {
-  player = new Player({ image: createImage(playerPic) });
+  player = new Player({ image: createImage(kunststudent) });
 
   let scrollOffset = 0;
   enemies = [
     new Enemy({
       x: 900,
       y: 476,
-      image: createImage(gegner1),
-      velocity: 1,
+      image: createImage(assi),
+      velocity: -5,
     }),
     new Enemy({
       x: 1200,
       y: 476,
-      image: createImage(gegner1),
-      velocity: -1,
+      image: createImage(assi),
+      velocity: -5,
+    }),
+
+    new Enemy({
+      x: 2500,
+      y: 476,
+      image: createImage(assi),
+      velocity: -5,
+    }),
+    new Enemy({
+      x: 2000,
+      y: 476,
+      image: createImage(assi),
+      velocity: 1,
     }),
   ];
-  // Platfoms
+  //PLATFORMS INIT FUNKTION
+  //PLATFORMS INIT FUNKTION
+  //PLATFORMS INIT FUNKTION
+  //PLATFORMS INIT FUNKTION
+  //PLATFORMS INIT FUNKTION
+  //PLATFORMS INIT FUNKTION
+  //PLATFORMS INIT FUNKTION
+  //PLATFORMS INIT FUNKTION
+  //PLATFORMS INIT FUNKTION
+  //PLATFORMS INIT FUNKTION
   platformImage = createImage(platform);
 
   platforms = [
+    new Platform({ x: 2910, y: 423, image: createImage(sbahn) }),
     new Platform({ x: -1, y: 549, image: platformImage }),
 
     new Platform({
@@ -100,7 +168,7 @@ function init() {
       y: 549,
       image: platformImage,
     }),
-    new Platform({ x: 0, y: 417, image: createImage(zug) }),
+    new Platform({ x: 0, y: 417, image: createImage(rrx) }),
     new Platform({ x: 499, y: 317, image: createImage(dach) }),
   ];
 
@@ -116,6 +184,21 @@ function init() {
     new GenericForeground({ x: 0, y: 620, image: createImage(gleise) }),
   ];
 }
+
+//Animate Funktion
+
+//Animate Funktion
+
+//Animate Funktion
+
+//Animate Funktion
+
+//Animate Funktion
+
+//Animate Funktion
+
+//Animate Funktion
+
 //Animate Funktion
 function animate() {
   requestAnimationFrame(animate);
@@ -124,6 +207,9 @@ function animate() {
   console.log(player.position.x);
 
   genericObjects.forEach((object) => {
+    object.draw();
+  });
+  genericForegroundObjects.forEach((object) => {
     object.draw();
   });
 
@@ -136,12 +222,17 @@ function animate() {
   });
   player.update();
 
-  genericForegroundObjects.forEach((object) => {
-    object.draw();
-  });
-
   // Player movement
-  if (keys.right.pressed && player.position.x < 400) {
+  // Player movement
+  // Player movement
+  // Player movement
+  // Player movement
+  // Player movement
+  // Player movement
+  // Player movement
+  // Player movement
+  // Player movement
+  if (keys.right.pressed && player.position.x < 600) {
     player.velocity.x = 5;
   } else if (
     (keys.left.pressed && player.position.x > 100) ||
@@ -164,7 +255,7 @@ function animate() {
         platform.position.x -= 5;
 
         genericObjects.forEach((object) => {
-          object.position.x -= 1;
+          object.position.x -= 0.6;
         });
       });
     } else if (keys.left.pressed) {
@@ -172,12 +263,34 @@ function animate() {
 
       platforms.forEach((platform) => {
         platform.position.x += 5;
-        genericObjects.forEach((object) => {
-          object.position.x += 1;
-        });
+      });
+      enemies.forEach((enemy) => {
+        enemy.position.x += 5;
+      });
+      genericObjects.forEach((object) => {
+        object.position.x += 0.6;
+      });
+      genericForegroundObjects.forEach((object) => {
+        object.position.x += 5;
       });
     }
   }
+
+  // Collision Detection
+
+  // Collision Detection
+
+  // Collision Detection
+
+  // Collision Detection
+
+  // Collision Detection
+
+  // Collision Detection
+
+  // Collision Detection
+
+  // Collision Detection
 
   // Collision Detection
   platforms.forEach((platform) => {
@@ -201,16 +314,26 @@ function animate() {
   }
 
   // ENEMY COLLISION FUNCTIONALITY
+  // ENEMY COLLISION FUNCTIONALITY
+  // ENEMY COLLISION FUNCTIONALITY
+  // ENEMY COLLISION FUNCTIONALITY
+  // ENEMY COLLISION FUNCTIONALITY
+  // ENEMY COLLISION FUNCTIONALITY
+  // ENEMY COLLISION FUNCTIONALITY
+  // ENEMY COLLISION FUNCTIONALITY
+  // ENEMY COLLISION FUNCTIONALITY
 
   enemies.forEach((enemy) => {
     // X-ACHSE
     if (
-      // player.position.y + player.height <= enemy.position.y &&
+      // (player.position.y + player.height === enemy.position.y &&
       (player.position.y + player.velocity.y >= enemy.position.y &&
-        player.position.x + player.width === enemy.position.x) ||
+        player.position.x + player.width >= enemy.position.x &&
+        player.position.x + player.width <= enemy.position.x + enemy.width) ||
       (player.position.y + player.velocity.y >= enemy.position.y &&
-        player.position.x - player.width === enemy.position.x)
+        player.position.x - player.width === enemy.position.x + enemy.width)
     ) {
+      debugger;
       init();
     }
     // Y-ACHSE
@@ -227,6 +350,12 @@ function animate() {
 }
 animate();
 // Check if Key is pressed
+// Check if Key is pressed
+// Check if Key is pressed
+// Check if Key is pressed
+// Check if Key is pressed
+// Check if Key is pressed
+// Check if Key is pressed
 window.addEventListener("keydown", ({ keyCode }) => {
   switch (keyCode) {
     case 65:
@@ -242,10 +371,10 @@ window.addEventListener("keydown", ({ keyCode }) => {
       keys.right.pressed = true;
       break;
     case 87:
-      player.velocity.y += -30;
+      player.velocity.y -= 25;
       break;
     case 38:
-      player.velocity.y += -30;
+      player.velocity.y -= 25;
       break;
   }
 });
@@ -264,10 +393,10 @@ window.addEventListener("keyup", ({ keyCode }) => {
       keys.right.pressed = false;
       break;
     case 87:
-      player.velocity.y = 0;
+      player.velocity.y += 0;
       break;
     case 38:
-      player.velocity.y = 0;
+      player.velocity.y += 0;
       break;
   }
 });
