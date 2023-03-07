@@ -1,13 +1,19 @@
 import frauRosaKleid from "./assets/Frau__Kleid.png";
 import kunststudent from "./assets/Kunststudent.png";
 import platform from "./assets/Steig.png";
+import platformMittel from "./assets/Bahnsteig-mittel.png";
+import platformKlein from "./assets/Bahnsteig-klein.png";
+import flugzeug from "./assets/Flugzeug.png";
+
 import hintergrund from "./assets/Hintergrund.png";
-import dach from "./assets/Dach.png";
+import dach from "./assets/Dach-mit-Schild.png";
 import sbahn from "./assets/S-BAHN.png";
 import automatUkraine from "./assets/Automat__Ukraine.png";
 import rrx from "./assets/Zug.png";
 import gleise from "./assets/Gleise.png";
 import assi from "./assets/Hat_man1.png";
+import laterne from "./assets/Straßenlaterne.png";
+import bierTafel from "./assets/Bierwerbung.png";
 
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
@@ -77,15 +83,48 @@ let platformImage = createImage(platform);
 
 let platforms = [
   new Platform({ x: 2910, y: 423, image: createImage(sbahn) }),
+  new Platform({ x: 4760, y: 423, image: createImage(bierTafel) }),
   new Platform({ x: -1, y: 549, image: platformImage }),
-
   new Platform({
     x: platformImage.width + 150,
     y: 549,
     image: platformImage,
   }),
+  new Platform({
+    x: 6050,
+    y: 549,
+    image: platformImage,
+  }),
+  new Platform({
+    x: 7250,
+    y: 549,
+    image: platformImage,
+  }),
+  new Platform({
+    x: 9250,
+    y: 549,
+    image: platformImage,
+  }),
+  new Platform({
+    x: 5450,
+    y: 549,
+    image: createImage(platformMittel),
+  }),
+  new Platform({
+    x: 5800,
+    y: 549,
+    image: createImage(platformKlein),
+  }),
   new Platform({ x: 0, y: 417, image: createImage(rrx) }),
   new Platform({ x: 499, y: 317, image: createImage(dach) }),
+  new Platform({ x: 2200, y: 217, image: createImage(laterne) }),
+  new Platform({ x: 3200, y: 217, image: createImage(laterne) }),
+  new Platform({ x: 4200, y: 217, image: createImage(laterne) }),
+  new Platform({ x: 5200, y: 217, image: createImage(laterne) }),
+  new Platform({ x: 6200, y: 217, image: createImage(laterne) }),
+  new Platform({ x: 7200, y: 217, image: createImage(laterne) }),
+  new Platform({ x: 6500, y: 317, image: createImage(dach) }),
+  new Platform({ x: 8200, y: 423, image: createImage(bierTafel) }),
 ];
 let genericObjects = [
   new GenericObject({
@@ -96,11 +135,40 @@ let genericObjects = [
 ];
 
 let genericForegroundObjects = [
-  new GenericForeground({ x: 0, y: 620, image: createImage(gleise) }),
+  new GenericForeground({
+    x: 0,
+    y: 620,
+    velocity: 0,
+    image: createImage(gleise),
+  }),
+  new GenericForeground({
+    x: 2000,
+    y: 620,
+    velocity: 0,
+    image: createImage(gleise),
+  }),
+  new GenericForeground({
+    x: 4000,
+    y: 620,
+    velocity: 0,
+    image: createImage(gleise),
+  }),
+  new GenericForeground({
+    x: 6200,
+    y: 620,
+    velocity: 0,
+    image: createImage(gleise),
+  }),
   new GenericForeground({
     x: 1041,
     y: 445,
     image: createImage(automatUkraine),
+  }),
+  new GenericForeground({
+    x: 0,
+    y: 100,
+    velocity: 2,
+    image: createImage(flugzeug),
   }),
 ];
 
@@ -161,15 +229,47 @@ function init() {
 
   platforms = [
     new Platform({ x: 2910, y: 423, image: createImage(sbahn) }),
+    new Platform({ x: 4760, y: 423, image: createImage(bierTafel) }),
     new Platform({ x: -1, y: 549, image: platformImage }),
-
     new Platform({
       x: platformImage.width + 150,
       y: 549,
       image: platformImage,
     }),
+    new Platform({
+      x: 6050,
+      y: 549,
+      image: platformImage,
+    }),
+    new Platform({
+      x: 7250,
+      y: 549,
+      image: platformImage,
+    }),
+    new Platform({
+      x: 8050,
+      y: 549,
+      image: platformImage,
+    }),
+    new Platform({
+      x: 5450,
+      y: 549,
+      image: createImage(platformMittel),
+    }),
+    new Platform({
+      x: 5800,
+      y: 549,
+      image: createImage(platformKlein),
+    }),
+    ,
     new Platform({ x: 0, y: 417, image: createImage(rrx) }),
     new Platform({ x: 499, y: 317, image: createImage(dach) }),
+    new Platform({ x: 2200, y: 217, image: createImage(laterne) }),
+    new Platform({ x: 3200, y: 217, image: createImage(laterne) }),
+    new Platform({ x: 4200, y: 217, image: createImage(laterne) }),
+    new Platform({ x: 5200, y: 217, image: createImage(laterne) }),
+    new Platform({ x: 6200, y: 217, image: createImage(laterne) }),
+    new Platform({ x: 7200, y: 217, image: createImage(laterne) }),
   ];
 
   genericObjects = [
@@ -181,7 +281,41 @@ function init() {
   ];
 
   genericForegroundObjects = [
-    new GenericForeground({ x: 0, y: 620, image: createImage(gleise) }),
+    new GenericForeground({
+      x: 0,
+      y: 620,
+      velocity: 0,
+      image: createImage(gleise),
+    }),
+    new GenericForeground({
+      x: 2000,
+      y: 620,
+      velocity: 0,
+      image: createImage(gleise),
+    }),
+    new GenericForeground({
+      x: 4000,
+      y: 620,
+      velocity: 0,
+      image: createImage(gleise),
+    }),
+    new GenericForeground({
+      x: 6200,
+      y: 620,
+      velocity: 0,
+      image: createImage(gleise),
+    }),
+    new GenericForeground({
+      x: 1041,
+      y: 445,
+      image: createImage(automatUkraine),
+    }),
+    new GenericForeground({
+      x: 0,
+      y: 100,
+      velocity: 2,
+      image: createImage(flugzeug),
+    }),
   ];
 }
 
@@ -211,6 +345,7 @@ function animate() {
   });
   genericForegroundObjects.forEach((object) => {
     object.draw();
+    object.update();
   });
 
   platforms.forEach((platform) => {
@@ -255,7 +390,7 @@ function animate() {
         platform.position.x -= 5;
 
         genericObjects.forEach((object) => {
-          object.position.x -= 0.6;
+          object.position.x -= 0.2;
         });
       });
     } else if (keys.left.pressed) {
@@ -268,7 +403,7 @@ function animate() {
         enemy.position.x += 5;
       });
       genericObjects.forEach((object) => {
-        object.position.x += 0.6;
+        object.position.x += 0.2;
       });
       genericForegroundObjects.forEach((object) => {
         object.position.x += 5;
