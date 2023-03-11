@@ -11,9 +11,11 @@ import sbahn from "./assets/S-BAHN.png";
 import automatUkraine from "./assets/Automat__Ukraine.png";
 import rrx from "./assets/Zug.png";
 import gleise from "./assets/Gleise.png";
-import assi from "./assets/Hat_man1.png";
+import assiRechts from "./assets/Hat_man-rechts.png";
+import assiLinks from "./assets/Hat_man-links.png";
 import laterne from "./assets/Straßenlaterne.png";
 import bierTafel from "./assets/Bierwerbung.png";
+import bierFlasche from "./assets/Das-Bier.png";
 
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
@@ -35,9 +37,26 @@ function createImage(imageSrc) {
   image.src = imageSrc;
   return image;
 }
-
+let bierCounter = 0;
+let bierCounterOutput = document.querySelector(".punkte");
 let player = new Player({ image: createImage(kunststudent) });
 let scrollOffset = 0;
+
+//BIER
+//BIER
+//BIER
+//BIER
+//BIER
+//BIER
+//BIER
+
+let bier = [
+  new Item({ x: 1390, y: 390, image: createImage(bierFlasche) }),
+  new Item({ x: 2250, y: 150, image: createImage(bierFlasche) }),
+  new Item({ x: 4050, y: 475, image: createImage(bierFlasche) }),
+  new Item({ x: 4250, y: 150, image: createImage(bierFlasche) }),
+  new Item({ x: 5990, y: 475, image: createImage(bierFlasche) }),
+];
 
 // ENEMIES
 // ENEMIES
@@ -48,24 +67,31 @@ let scrollOffset = 0;
 // ENEMIES
 let enemies = [
   new Enemy({
+    x: 900,
+    y: 476,
+    image: createImage(assiLinks),
+    velocity: -5,
+  }),
+
+  new Enemy({
     x: 1200,
-    y: 479,
-    image: createImage(frauRosaKleid),
-    velocity: -1,
+    y: 476,
+    image: createImage(assiLinks),
+    velocity: -5,
   }),
 
   new Enemy({
     x: 2500,
-    y: 478,
-    image: createImage(assi),
-    velocity: -1,
+    y: 476,
+    image: createImage(assiLinks),
+    velocity: -5,
   }),
-  new Enemy({
-    x: 2000,
-    y: 478,
-    image: createImage(assi),
-    velocity: 1,
-  }),
+  // new Enemy({
+  //   x: 2000,
+  //   y: 476,
+  //   image: createImage(assiRechts),
+  //   velocity: 1,
+  // }),
 ];
 
 //PLATFORMS
@@ -125,6 +151,7 @@ let platforms = [
   new Platform({ x: 7200, y: 217, image: createImage(laterne) }),
   new Platform({ x: 6500, y: 317, image: createImage(dach) }),
   new Platform({ x: 8200, y: 423, image: createImage(bierTafel) }),
+  new Platform({ x: 1370, y: 442, image: createImage(automatUkraine) }),
 ];
 let genericObjects = [
   new GenericObject({
@@ -159,11 +186,7 @@ let genericForegroundObjects = [
     velocity: 0,
     image: createImage(gleise),
   }),
-  new GenericForeground({
-    x: 1041,
-    y: 445,
-    image: createImage(automatUkraine),
-  }),
+
   new GenericForeground({
     x: 0,
     y: 100,
@@ -192,26 +215,26 @@ function init() {
     new Enemy({
       x: 900,
       y: 476,
-      image: createImage(assi),
+      image: createImage(assiLinks),
       velocity: -5,
     }),
     new Enemy({
       x: 1200,
       y: 476,
-      image: createImage(assi),
+      image: createImage(assiLinks),
       velocity: -5,
     }),
 
     new Enemy({
       x: 2500,
       y: 476,
-      image: createImage(assi),
+      image: createImage(assiLinks),
       velocity: -5,
     }),
     new Enemy({
       x: 2000,
       y: 476,
-      image: createImage(assi),
+      image: createImage(assiRechts),
       velocity: 1,
     }),
   ];
@@ -270,6 +293,16 @@ function init() {
     new Platform({ x: 5200, y: 217, image: createImage(laterne) }),
     new Platform({ x: 6200, y: 217, image: createImage(laterne) }),
     new Platform({ x: 7200, y: 217, image: createImage(laterne) }),
+    new Platform({ x: 1370, y: 442, image: createImage(automatUkraine) }),
+  ];
+
+  //Bier INIT
+  bier = [
+    new Item({ x: 1390, y: 390, image: createImage(bierFlasche) }),
+    new Item({ x: 2250, y: 150, image: createImage(bierFlasche) }),
+    new Item({ x: 4050, y: 475, image: createImage(bierFlasche) }),
+    new Item({ x: 4250, y: 150, image: createImage(bierFlasche) }),
+    new Item({ x: 5990, y: 475, image: createImage(bierFlasche) }),
   ];
 
   genericObjects = [
@@ -343,6 +376,7 @@ function animate() {
   genericObjects.forEach((object) => {
     object.draw();
   });
+
   genericForegroundObjects.forEach((object) => {
     object.draw();
     object.update();
@@ -351,10 +385,14 @@ function animate() {
   platforms.forEach((platform) => {
     platform.draw();
   });
+  bier.forEach((bier) => {
+    bier.draw();
+  });
   enemies.forEach((enemy) => {
     enemy.draw();
     enemy.update();
   });
+
   player.update();
 
   // Player movement
@@ -370,7 +408,7 @@ function animate() {
   if (keys.right.pressed && player.position.x < 600) {
     player.velocity.x = 5;
   } else if (
-    (keys.left.pressed && player.position.x > 100) ||
+    (keys.left.pressed && player.position.x > 600) ||
     (keys.left.pressed && scrollOffset === 0 && player.position.x > 0)
   ) {
     player.velocity.x = -5;
@@ -383,6 +421,9 @@ function animate() {
       genericForegroundObjects.forEach((object) => {
         object.position.x -= 5;
       }),
+        bier.forEach((bier) => {
+          bier.position.x -= 5;
+        }),
         enemies.forEach((enemy) => {
           enemy.position.x -= 5;
         });
@@ -407,6 +448,9 @@ function animate() {
       });
       genericForegroundObjects.forEach((object) => {
         object.position.x += 5;
+      });
+      bier.forEach((bier) => {
+        bier.position.x += 5;
       });
     }
   }
@@ -447,6 +491,40 @@ function animate() {
   if (player.position.y > canvas.height) {
     init();
   }
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  // Bier Collision
+  bier.forEach((bier) => {
+    // Bier Collision
+    {
+      if (
+        player.position.x < bier.position.x + bier.width &&
+        player.position.x + player.width > bier.position.x &&
+        player.position.y < bier.position.y + bier.height &&
+        player.position.y + player.height > bier.position.y
+      ) {
+        bierCounter++;
+
+        bierCounterOutput.innerHTML = bierCounter;
+      } else {
+        console.log("no collision");
+      }
+    }
+  });
 
   // ENEMY COLLISION FUNCTIONALITY
   // ENEMY COLLISION FUNCTIONALITY
@@ -461,28 +539,18 @@ function animate() {
   enemies.forEach((enemy) => {
     // X-ACHSE
     if (
-      // (player.position.y + player.height === enemy.position.y &&
-      (player.position.y + player.velocity.y >= enemy.position.y &&
-        player.position.x + player.width >= enemy.position.x &&
-        player.position.x + player.width <= enemy.position.x + enemy.width) ||
-      (player.position.y + player.velocity.y >= enemy.position.y &&
-        player.position.x - player.width === enemy.position.x + enemy.width)
-    ) {
-      debugger;
-      init();
-    }
-    // Y-ACHSE
-    else if (
-      player.position.y + player.height <= enemy.position.y &&
-      player.position.y + player.height + player.velocity.y >=
-        enemy.position.y &&
-      player.position.x + player.width >= enemy.position.x &&
-      player.position.x <= enemy.position.x + enemy.width
+      player.position.x < enemy.position.x + enemy.width &&
+      player.position.x + player.width > enemy.position.x &&
+      player.position.y < enemy.position.y + enemy.height &&
+      player.position.y + player.height > enemy.position.y
     ) {
       init();
+    } else {
+      console.log("no collision");
     }
   });
 }
+
 animate();
 // Check if Key is pressed
 // Check if Key is pressed
@@ -506,10 +574,14 @@ window.addEventListener("keydown", ({ keyCode }) => {
       keys.right.pressed = true;
       break;
     case 87:
-      player.velocity.y -= 25;
+      if (player.velocity.y === 0) {
+        player.velocity.y -= 25;
+      }
       break;
     case 38:
-      player.velocity.y -= 25;
+      if (player.velocity.y === 0) {
+        player.velocity.y -= 25;
+      }
       break;
   }
 });
