@@ -4,7 +4,6 @@ import platform from "./assets/Steig.png";
 import platformMittel from "./assets/Bahnsteig-mittel.png";
 import platformKlein from "./assets/Bahnsteig-klein.png";
 import flugzeug from "./assets/Flugzeug.png";
-
 import hintergrund from "./assets/Hintergrund.png";
 import dach from "./assets/Dach-mit-Schild.png";
 import sbahn from "./assets/S-BAHN.png";
@@ -16,9 +15,15 @@ import assiLinks from "./assets/Hat_man-links.png";
 import laterne from "./assets/Straßenlaterne.png";
 import bierTafel from "./assets/Bierwerbung.png";
 import bierFlasche from "./assets/Das-Bier.png";
+import collisionBorder from "./assets/collisionBorder.png";
+import plattformMed from "./assets/PlattformMed.png";
+import dachMed from "./assets/Dach-Medium.png";
+import rrxFährt from "./assets/RRX-fährt.png";
 
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
+
+let jump = new Audio("./assets/sounds/jump.mp3");
 
 canvas.width = 1280;
 canvas.height = 720;
@@ -50,12 +55,14 @@ let scrollOffset = 0;
 //BIER
 //BIER
 
-let bier = [
+let biere = [
   new Item({ x: 1390, y: 390, image: createImage(bierFlasche) }),
   new Item({ x: 2250, y: 150, image: createImage(bierFlasche) }),
   new Item({ x: 4050, y: 475, image: createImage(bierFlasche) }),
   new Item({ x: 4250, y: 150, image: createImage(bierFlasche) }),
+  new Item({ x: 4800, y: 355, image: createImage(bierFlasche) }),
   new Item({ x: 5990, y: 475, image: createImage(bierFlasche) }),
+  new Item({ x: 7290, y: 150, image: createImage(bierFlasche) }),
 ];
 
 // ENEMIES
@@ -72,26 +79,50 @@ let enemies = [
     image: createImage(assiLinks),
     velocity: -5,
   }),
+  new Enemy({
+    x: 900,
+    y: 248,
+    image: createImage(assiLinks),
+    velocity: -2,
+  }),
+  new Enemy({
+    x: 1500,
+    y: 476,
+    image: createImage(assiRechts),
+    velocity: 2,
+  }),
 
   new Enemy({
     x: 1200,
     y: 476,
     image: createImage(assiLinks),
-    velocity: -5,
+    velocity: -1,
   }),
 
   new Enemy({
-    x: 2500,
+    x: 3000,
     y: 476,
     image: createImage(assiLinks),
-    velocity: -5,
+    velocity: -3,
   }),
-  // new Enemy({
-  //   x: 2000,
-  //   y: 476,
-  //   image: createImage(assiRechts),
-  //   velocity: 1,
-  // }),
+  new Enemy({
+    x: 3800,
+    y: 476,
+    image: createImage(assiRechts),
+    velocity: 2,
+  }),
+  new Enemy({
+    x: 4500,
+    y: 476,
+    image: createImage(assiRechts),
+    velocity: 2,
+  }),
+  new Enemy({
+    x: 4700,
+    y: 476,
+    image: createImage(assiLinks),
+    velocity: -2,
+  }),
 ];
 
 //PLATFORMS
@@ -119,18 +150,24 @@ let platforms = [
   new Platform({
     x: 6050,
     y: 549,
-    image: platformImage,
+    image: createImage(plattformMed),
   }),
   new Platform({
-    x: 7250,
-    y: 549,
-    image: platformImage,
+    x: 8690,
+    y: 510,
+    image: createImage(rrxFährt),
   }),
   new Platform({
-    x: 9250,
+    x: 7440,
     y: 549,
-    image: platformImage,
+    image: createImage(plattformMed),
   }),
+
+  // new Platform({
+  //   x: 9250,
+  //   y: 549,
+  //   image: platformImage,
+  // }),
   new Platform({
     x: 5450,
     y: 549,
@@ -143,15 +180,64 @@ let platforms = [
   }),
   new Platform({ x: 0, y: 417, image: createImage(rrx) }),
   new Platform({ x: 499, y: 317, image: createImage(dach) }),
-  new Platform({ x: 2200, y: 217, image: createImage(laterne) }),
-  new Platform({ x: 3200, y: 217, image: createImage(laterne) }),
-  new Platform({ x: 4200, y: 217, image: createImage(laterne) }),
-  new Platform({ x: 5200, y: 217, image: createImage(laterne) }),
+  new Platform({
+    x: 2200,
+    y: 217,
+    image: createImage(laterne),
+    collision: true,
+  }),
+  new Platform({
+    x: 3200,
+    y: 217,
+    image: createImage(laterne),
+    collision: true,
+  }),
+  new Platform({
+    x: 4200,
+    y: 217,
+    image: createImage(laterne),
+    collision: true,
+  }),
+  new Platform({
+    x: 5200,
+    y: 217,
+    image: createImage(laterne),
+    collision: true,
+  }),
   new Platform({ x: 6200, y: 217, image: createImage(laterne) }),
-  new Platform({ x: 7200, y: 217, image: createImage(laterne) }),
-  new Platform({ x: 6500, y: 317, image: createImage(dach) }),
-  new Platform({ x: 8200, y: 423, image: createImage(bierTafel) }),
-  new Platform({ x: 1370, y: 442, image: createImage(automatUkraine) }),
+
+  new Platform({ x: 6500, y: 317, image: createImage(dachMed) }),
+  new Platform({ x: 6300, y: 423, image: createImage(bierTafel) }),
+  new Platform({
+    x: 1370,
+    y: 442,
+    image: createImage(automatUkraine),
+    collision: true,
+  }),
+  new Platform({
+    x: 499,
+    y: 7,
+    image: createImage(collisionBorder),
+    collision: true,
+  }),
+  new Platform({
+    x: 1950,
+    y: 0,
+    image: createImage(collisionBorder),
+    collision: true,
+  }),
+  new Platform({
+    x: 950,
+    y: 417,
+    image: createImage(collisionBorder),
+    collision: true,
+  }),
+  new Platform({
+    x: 2700,
+    y: 317,
+    image: createImage(collisionBorder),
+    collision: true,
+  }),
 ];
 let genericObjects = [
   new GenericObject({
@@ -186,6 +272,36 @@ let genericForegroundObjects = [
     velocity: 0,
     image: createImage(gleise),
   }),
+  new GenericForeground({
+    x: 8000,
+    y: 620,
+    velocity: 0,
+    image: createImage(gleise),
+  }),
+  new GenericForeground({
+    x: 10000,
+    y: 620,
+    velocity: 0,
+    image: createImage(gleise),
+  }),
+  new GenericForeground({
+    x: 12000,
+    y: 620,
+    velocity: 0,
+    image: createImage(gleise),
+  }),
+  new GenericForeground({
+    x: 14000,
+    y: 620,
+    velocity: 0,
+    image: createImage(gleise),
+  }),
+  new GenericForeground({
+    x: 16000,
+    y: 620,
+    velocity: 0,
+    image: createImage(gleise),
+  }),
 
   new GenericForeground({
     x: 0,
@@ -211,6 +327,10 @@ function init() {
   player = new Player({ image: createImage(kunststudent) });
 
   let scrollOffset = 0;
+
+  bierCounter = 0;
+  bierCounterOutput.innerHTML = bierCounter;
+
   enemies = [
     new Enemy({
       x: 900,
@@ -219,23 +339,36 @@ function init() {
       velocity: -5,
     }),
     new Enemy({
-      x: 1200,
-      y: 476,
+      x: 900,
+      y: 248,
       image: createImage(assiLinks),
-      velocity: -5,
+      velocity: -2,
+    }),
+    new Enemy({
+      x: 1550,
+      y: 476,
+      image: createImage(frauRosaKleid),
+      velocity: 2,
     }),
 
     new Enemy({
-      x: 2500,
+      x: 1200,
       y: 476,
       image: createImage(assiLinks),
-      velocity: -5,
+      velocity: -1,
+    }),
+
+    new Enemy({
+      x: 3500,
+      y: 476,
+      image: createImage(assiLinks),
+      velocity: -3,
     }),
     new Enemy({
-      x: 2000,
+      x: 3800,
       y: 476,
       image: createImage(assiRechts),
-      velocity: 1,
+      velocity: 2,
     }),
   ];
   //PLATFORMS INIT FUNKTION
@@ -262,18 +395,24 @@ function init() {
     new Platform({
       x: 6050,
       y: 549,
-      image: platformImage,
+      image: createImage(plattformMed),
     }),
     new Platform({
-      x: 7250,
-      y: 549,
-      image: platformImage,
+      x: 8690,
+      y: 510,
+      image: createImage(rrxFährt),
     }),
     new Platform({
-      x: 8050,
+      x: 7440,
       y: 549,
-      image: platformImage,
+      image: createImage(plattformMed),
     }),
+
+    // new Platform({
+    //   x: 9250,
+    //   y: 549,
+    //   image: platformImage,
+    // }),
     new Platform({
       x: 5450,
       y: 549,
@@ -284,20 +423,70 @@ function init() {
       y: 549,
       image: createImage(platformKlein),
     }),
-    ,
     new Platform({ x: 0, y: 417, image: createImage(rrx) }),
     new Platform({ x: 499, y: 317, image: createImage(dach) }),
-    new Platform({ x: 2200, y: 217, image: createImage(laterne) }),
-    new Platform({ x: 3200, y: 217, image: createImage(laterne) }),
-    new Platform({ x: 4200, y: 217, image: createImage(laterne) }),
-    new Platform({ x: 5200, y: 217, image: createImage(laterne) }),
+    new Platform({
+      x: 2200,
+      y: 217,
+      image: createImage(laterne),
+      collision: true,
+    }),
+    new Platform({
+      x: 3200,
+      y: 217,
+      image: createImage(laterne),
+      collision: true,
+    }),
+    new Platform({
+      x: 4200,
+      y: 217,
+      image: createImage(laterne),
+      collision: true,
+    }),
+    new Platform({
+      x: 5200,
+      y: 217,
+      image: createImage(laterne),
+      collision: true,
+    }),
     new Platform({ x: 6200, y: 217, image: createImage(laterne) }),
-    new Platform({ x: 7200, y: 217, image: createImage(laterne) }),
-    new Platform({ x: 1370, y: 442, image: createImage(automatUkraine) }),
+
+    new Platform({ x: 6500, y: 317, image: createImage(dachMed) }),
+    new Platform({ x: 6300, y: 423, image: createImage(bierTafel) }),
+    new Platform({
+      x: 1370,
+      y: 442,
+      image: createImage(automatUkraine),
+      collision: true,
+    }),
+    new Platform({
+      x: 499,
+      y: 7,
+      image: createImage(collisionBorder),
+      collision: true,
+    }),
+    new Platform({
+      x: 1950,
+      y: 0,
+      image: createImage(collisionBorder),
+      collision: true,
+    }),
+    new Platform({
+      x: 950,
+      y: 417,
+      image: createImage(collisionBorder),
+      collision: true,
+    }),
+    new Platform({
+      x: 2700,
+      y: 317,
+      image: createImage(collisionBorder),
+      collision: true,
+    }),
   ];
 
   //Bier INIT
-  bier = [
+  biere = [
     new Item({ x: 1390, y: 390, image: createImage(bierFlasche) }),
     new Item({ x: 2250, y: 150, image: createImage(bierFlasche) }),
     new Item({ x: 4050, y: 475, image: createImage(bierFlasche) }),
@@ -339,10 +528,36 @@ function init() {
       image: createImage(gleise),
     }),
     new GenericForeground({
-      x: 1041,
-      y: 445,
-      image: createImage(automatUkraine),
+      x: 8000,
+      y: 620,
+      velocity: 0,
+      image: createImage(gleise),
     }),
+    new GenericForeground({
+      x: 10000,
+      y: 620,
+      velocity: 0,
+      image: createImage(gleise),
+    }),
+    new GenericForeground({
+      x: 12000,
+      y: 620,
+      velocity: 0,
+      image: createImage(gleise),
+    }),
+    new GenericForeground({
+      x: 14000,
+      y: 620,
+      velocity: 0,
+      image: createImage(gleise),
+    }),
+    new GenericForeground({
+      x: 16000,
+      y: 620,
+      velocity: 0,
+      image: createImage(gleise),
+    }),
+
     new GenericForeground({
       x: 0,
       y: 100,
@@ -369,9 +584,9 @@ function init() {
 //Animate Funktion
 function animate() {
   requestAnimationFrame(animate);
+
   c.fillStyle = "white";
   c.fillRect(0, 0, canvas.width, canvas.height);
-  console.log(player.position.x);
 
   genericObjects.forEach((object) => {
     object.draw();
@@ -385,7 +600,7 @@ function animate() {
   platforms.forEach((platform) => {
     platform.draw();
   });
-  bier.forEach((bier) => {
+  biere.forEach((bier) => {
     bier.draw();
   });
   enemies.forEach((enemy) => {
@@ -394,6 +609,15 @@ function animate() {
   });
 
   player.update();
+
+  if (scrollOffset >= 9350) {
+    genericObjects.forEach((object) => {
+      object.position.x -= 0.6;
+    });
+    genericForegroundObjects.forEach((object) => {
+      object.position.x -= 10;
+    });
+  }
 
   // Player movement
   // Player movement
@@ -421,7 +645,7 @@ function animate() {
       genericForegroundObjects.forEach((object) => {
         object.position.x -= 5;
       }),
-        bier.forEach((bier) => {
+        biere.forEach((bier) => {
           bier.position.x -= 5;
         }),
         enemies.forEach((enemy) => {
@@ -444,18 +668,38 @@ function animate() {
         enemy.position.x += 5;
       });
       genericObjects.forEach((object) => {
-        object.position.x += 0.2;
+        object.position.x += 4;
       });
       genericForegroundObjects.forEach((object) => {
         object.position.x += 5;
       });
-      bier.forEach((bier) => {
+      biere.forEach((bier) => {
         bier.position.x += 5;
       });
     }
   }
 
-  // Collision Detection
+  enemies.forEach((enemy) => {
+    platforms.forEach((platform) => {
+      if (
+        enemy.position.x < platform.position.x + platform.width &&
+        enemy.position.x + enemy.width > platform.position.x &&
+        enemy.position.y < platform.position.y + platform.height &&
+        enemy.position.y + enemy.height > platform.position.y &&
+        platform.collision === true
+      ) {
+        if (enemy.velocity > 0) {
+          enemy.velocity = -enemy.velocity;
+          enemy.image = createImage(assiLinks);
+        } else if (enemy.velocity < 0) {
+          enemy.velocity = enemy.velocity * -1;
+          enemy.image = createImage(assiRechts);
+        }
+      }
+    });
+  });
+
+  // Collision Detection Plattform
 
   // Collision Detection
 
@@ -484,10 +728,6 @@ function animate() {
     }
   });
 
-  if (scrollOffset > 2000) {
-    console.log("you win");
-  }
-
   if (player.position.y > canvas.height) {
     init();
   }
@@ -508,7 +748,7 @@ function animate() {
   // Bier Collision
   // Bier Collision
   // Bier Collision
-  bier.forEach((bier) => {
+  biere = biere.filter((bier) => {
     // Bier Collision
     {
       if (
@@ -518,11 +758,10 @@ function animate() {
         player.position.y + player.height > bier.position.y
       ) {
         bierCounter++;
-
-        bierCounterOutput.innerHTML = bierCounter;
-      } else {
-        console.log("no collision");
+        bierCounterOutput.innerHTML = `<span>${bierCounter}</span> BIERE`;
+        return false;
       }
+      return true;
     }
   });
 
@@ -576,11 +815,13 @@ window.addEventListener("keydown", ({ keyCode }) => {
     case 87:
       if (player.velocity.y === 0) {
         player.velocity.y -= 25;
+        jump.play();
       }
       break;
     case 38:
       if (player.velocity.y === 0) {
         player.velocity.y -= 25;
+        jump.play();
       }
       break;
   }

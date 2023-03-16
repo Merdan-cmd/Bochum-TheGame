@@ -1,9 +1,11 @@
 class Platform {
-  constructor({ x, y, image }) {
+  constructor({ x, y, image, collision, id }) {
     (this.position = {
       x,
       y,
     }),
+      (this.collision = collision),
+      (this.id = id),
       (this.image = image);
     this.width = image.width;
     this.height = image.height;

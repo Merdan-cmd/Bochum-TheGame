@@ -7,6 +7,8 @@ class Item {
       (this.image = image);
     this.width = image.width;
     this.height = image.height;
+
+    this.collected = false;
   }
 
   draw() {
