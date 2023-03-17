@@ -1,5 +1,5 @@
 class Platform {
-  constructor({ x, y, image, collision, id }) {
+  constructor({ x, y, image, collision, id, c }) {
     (this.position = {
       x,
       y,
@@ -9,11 +9,14 @@ class Platform {
       (this.image = image);
     this.width = image.width;
     this.height = image.height;
+    this.c = c;
   }
 
   draw() {
     // c.fillStyle = "blue";
     // c.fillRect(this.position.x, this.position.y, this.width, this.height);
-    c.drawImage(this.image, this.position.x, this.position.y);
+    this.c.drawImage(this.image, this.position.x, this.position.y);
   }
 }
+
+export default Platform;

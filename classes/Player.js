@@ -1,8 +1,6 @@
-const canvas = document.querySelector("canvas");
-const c = canvas.getContext("2d");
 const gravity = 1.5;
 class Player {
-  constructor({ image }) {
+  constructor({ image, c, canvas, canvasHeight, canvasWidth }) {
     this.position = {
       x: 100,
       y: 479,
@@ -14,10 +12,14 @@ class Player {
     (this.image = image),
       (this.width = image.width),
       (this.height = image.height);
+    this.c = c;
+    this.canvas = canvas;
+    this.canvasHeight = canvasHeight;
+    this.canvasWidth = canvasWidth;
   }
 
   draw() {
-    c.drawImage(
+    this.c.drawImage(
       this.image,
       this.position.x,
       this.position.y,
@@ -29,8 +31,10 @@ class Player {
     this.draw();
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
-    if (this.position.y + this.height + this.velocity.y <= canvas.height) {
+    if (this.position.y + this.height + this.velocity.y <= this.canvasHeight) {
       this.velocity.y += gravity;
     }
   }
 }
+
+export default Player;

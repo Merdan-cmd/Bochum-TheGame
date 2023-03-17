@@ -1,5 +1,5 @@
 class Enemy {
-  constructor({ x, y, image, velocity }) {
+  constructor({ x, y, image, velocity, c }) {
     (this.position = {
       x,
       y,
@@ -8,12 +8,13 @@ class Enemy {
       (this.image = image);
     this.width = image.width;
     this.height = image.height;
+    this.c = c;
   }
 
   draw() {
     // c.fillStyle = "green";
     // c.fillRect(this.position.x, this.position.y, this.width, this.height);
-    c.drawImage(
+    this.c.drawImage(
       this.image,
       this.position.x,
       this.position.y,
@@ -26,3 +27,5 @@ class Enemy {
     this.position.x += this.velocity;
   }
 }
+
+export default Enemy;
