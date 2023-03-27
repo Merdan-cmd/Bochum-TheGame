@@ -1,4 +1,11 @@
 const gravity = 1.5;
+import spriteRunRight from "../assets/spritesheet-rechts.png";
+import spriteStandRight from "../assets/Kunststudent.png";
+function createImage(imageSrc) {
+  const image = new Image();
+  image.src = imageSrc;
+  return image;
+}
 class Player {
   constructor({ image, c, canvas, canvasHeight, canvasWidth }) {
     this.position = {
@@ -10,8 +17,22 @@ class Player {
       y: 0,
     };
     (this.image = image),
-      (this.width = image.width),
-      (this.height = image.height);
+      (this.frames = 0),
+      (this.width = this.image.width),
+      (this.height = this.image.height);
+
+    this.sprites = {
+      stand: {
+        right: createImage(spriteStandRight),
+        cropWidth: 50,
+      },
+      run: {
+        right: createImage(spriteRunRight),
+        cropWidth: 50,
+      },
+    };
+    this.currentSprite = this.sprites.stand.right;
+
     this.c = c;
     this.canvas = canvas;
     this.canvasHeight = canvasHeight;
@@ -20,7 +41,11 @@ class Player {
 
   draw() {
     this.c.drawImage(
-      this.image,
+      this.currentSprite,
+      50 * this.frames,
+      0,
+      50,
+      70,
       this.position.x,
       this.position.y,
       this.width,
@@ -29,6 +54,10 @@ class Player {
   }
   update() {
     this.draw();
+    this.frames++;
+    if (this.frames > 15) {
+      this.frames = 0;
+    }
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
     if (this.position.y + this.height + this.velocity.y <= this.canvasHeight) {

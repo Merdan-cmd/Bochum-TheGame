@@ -933,6 +933,7 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
       case 68:
         keys.right.pressed = true;
+        player.currentSprite = player.sprites.run.right;
         break;
       case 87:
         if (player.velocity.y === 0) {
