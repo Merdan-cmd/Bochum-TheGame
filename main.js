@@ -761,7 +761,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Platform movement
       if (keys.right.pressed) {
         scrollOffset += 5;
-        player.image = createImage(kunststudent);
+        player.imageSrc = "./assets/spritesheet-rechts.png";
 
         genericForegroundObjects.forEach((object) => {
           object.position.x -= 5;

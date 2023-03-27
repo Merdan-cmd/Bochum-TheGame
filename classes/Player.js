@@ -6,6 +6,7 @@ function createImage(imageSrc) {
   image.src = imageSrc;
   return image;
 }
+
 class Player {
   constructor({ image, c, canvas, canvasHeight, canvasWidth }) {
     this.position = {
@@ -16,6 +17,7 @@ class Player {
       x: 0,
       y: 0,
     };
+
     (this.image = image),
       (this.frames = 0),
       (this.width = this.image.width),
@@ -42,7 +44,7 @@ class Player {
   draw() {
     this.c.drawImage(
       this.currentSprite,
-      50 * this.frames,
+      50 * Math.floor(this.frames / 15),
       0,
       50,
       70,
@@ -55,7 +57,7 @@ class Player {
   update() {
     this.draw();
     this.frames++;
-    if (this.frames > 15) {
+    if (this.frames > 150) {
       this.frames = 0;
     }
     this.position.x += this.velocity.x;
