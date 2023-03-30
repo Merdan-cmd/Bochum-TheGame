@@ -1,5 +1,5 @@
 class GenericForeground {
-  constructor({ x, y, image, velocity, c }) {
+  constructor({ x, y, image, velocity, c, id }) {
     (this.position = {
       x,
       y,
@@ -9,6 +9,7 @@ class GenericForeground {
     this.width = image.width;
     this.height = image.height;
     this.c = c;
+    this.id = id;
   }
 
   draw() {

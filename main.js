@@ -1,12 +1,13 @@
-import frauRosaKleid from "./assets/Frau__Kleid.png";
-import kunststudent from "./assets/Kunststudent.png";
-import kunststudentLinks from "./assets/KunststudentLinks.png";
 import platform from "./assets/Steig.png";
 import platformMittel from "./assets/Bahnsteig-mittel.png";
 import platformKlein from "./assets/Bahnsteig-klein.png";
 import flugzeug from "./assets/Flugzeug.png";
+import ufo from "./assets/UFO.png";
+import rakete from "./assets/Rakete.png";
 import hintergrund from "./assets/Hintergrund.png";
 import dach from "./assets/Dach-mit-Schild.png";
+import handelshof from "./assets/Handelshof.png";
+import werkbank from "./assets/Werkbank-Tafel.png";
 import sbahn from "./assets/S-BAHN.png";
 import automatUkraine from "./assets/Automat__Ukraine.png";
 import rrx from "./assets/Zug.png";
@@ -27,13 +28,21 @@ import GenericObject from "./classes/GenericObjects";
 import Enemy from "./classes/Enemy";
 import Item from "./classes/Item";
 
+const button = document.querySelector("button");
+const logo = document.querySelector(".logo");
+const zeit = document.querySelector(".zeit");
+let zeitCounter = 0;
+const introText = document.querySelector(".text");
+
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.querySelector("canvas");
   const c = canvas.getContext("2d");
 
   let jump = new Audio("./assets/sounds/jump.mp3");
   let music = new Audio("./assets/sounds/music.mp3");
+  let itemSound = new Audio("./assets/sounds/beer.mp3");
   music.play();
+  music.volume = 0.3;
 
   canvas.width = 1280;
   canvas.height = 720;
@@ -59,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let bierCounter = 0;
   let bierCounterOutput = document.querySelector(".punkte");
   let player = new Player({
-    image: createImage(kunststudent),
     c,
     canvas,
     canvasHeight,
@@ -95,16 +103,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let enemies = [
     new Enemy({
       x: 900,
-      y: 476,
+      y: 240,
       image: createImage(assiLinks),
-      velocity: -5,
-      c,
-    }),
-    new Enemy({
-      x: 900,
-      y: 248,
-      image: createImage(assiLinks),
-      velocity: -2,
+      velocity: -1,
       c,
     }),
     new Enemy({
@@ -168,7 +169,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let platforms = [
     new Platform({ x: 2910, y: 423, image: createImage(sbahn), c }),
-    new Platform({ x: 4760, y: 423, image: createImage(bierTafel), c }),
+    new Platform({
+      x: 4760,
+      y: 423,
+      image: createImage(werkbank),
+      id: "werkbank",
+      c,
+    }),
     new Platform({ x: -1, y: 549, image: platformImage, c }),
     new Platform({
       x: platformImage.width + 150,
@@ -193,6 +200,12 @@ document.addEventListener("DOMContentLoaded", () => {
       x: 7440,
       y: 549,
       image: createImage(plattformMed),
+      c,
+    }),
+    new Platform({
+      x: 7440,
+      y: 40,
+      image: createImage(handelshof),
       c,
     }),
 
@@ -364,6 +377,21 @@ document.addEventListener("DOMContentLoaded", () => {
       image: createImage(flugzeug),
       c,
     }),
+    new GenericForeground({
+      x: -100,
+      y: 100,
+      velocity: 0,
+      image: createImage(rakete),
+      c,
+      id: "rakete",
+    }),
+    new GenericForeground({
+      x: 6000,
+      y: 80,
+      velocity: -4,
+      image: createImage(ufo),
+      c,
+    }),
   ];
 
   // ####################
@@ -380,13 +408,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // ####################
   function init() {
     player = new Player({
-      image: createImage(kunststudent),
       c,
       canvas,
       canvasHeight,
       canvasWidth,
     });
     music.play();
+    music.volume = 0.3;
 
     let scrollOffset = 0;
 
@@ -396,16 +424,9 @@ document.addEventListener("DOMContentLoaded", () => {
     enemies = [
       new Enemy({
         x: 900,
-        y: 476,
+        y: 240,
         image: createImage(assiLinks),
-        velocity: -3,
-        c,
-      }),
-      new Enemy({
-        x: 900,
-        y: 248,
-        image: createImage(assiLinks),
-        velocity: -2,
+        velocity: -1,
         c,
       }),
       new Enemy({
@@ -467,7 +488,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     platforms = [
       new Platform({ x: 2910, y: 423, image: createImage(sbahn), c }),
-      new Platform({ x: 4760, y: 423, image: createImage(bierTafel), c }),
+      new Platform({
+        x: 4760,
+        y: 423,
+        image: createImage(werkbank),
+        id: "werkbank",
+        c,
+      }),
       new Platform({ x: -1, y: 549, image: platformImage, c }),
       new Platform({
         x: platformImage.width + 150,
@@ -675,6 +702,22 @@ document.addEventListener("DOMContentLoaded", () => {
         image: createImage(flugzeug),
         c,
       }),
+      new GenericForeground({
+        x: 0,
+        y: 50,
+        velocity: 2,
+        image: createImage(rakete),
+        id: "rakete",
+        c,
+      }),
+      new GenericForeground({
+        x: 0,
+        y: 50,
+        velocity: -2,
+        image: createImage(ufo),
+
+        c,
+      }),
     ];
   }
 
@@ -737,6 +780,19 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
+    platforms.forEach((platform) => {
+      if (
+        player.position.x + player.width >= platform.position.x &&
+        platform.id === "werkbank"
+      ) {
+        genericForegroundObjects.forEach((object) => {
+          if (object.id === "rakete") {
+            object.velocity = 15;
+          }
+        });
+      }
+    });
+
     // Player movement
     // Player movement
     // Player movement
@@ -749,19 +805,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // Player movement
     if (keys.right.pressed && player.position.x < 600) {
       player.velocity.x = 5;
-      player.image = createImage(kunststudent);
     } else if (
       (keys.left.pressed && player.position.x > 600) ||
       (keys.left.pressed && scrollOffset === 0 && player.position.x > 0)
     ) {
       player.velocity.x = -5;
-      player.image = createImage(kunststudentLinks);
     } else {
       player.velocity.x = 0;
       // Platform movement
       if (keys.right.pressed) {
         scrollOffset += 5;
-        player.imageSrc = "./assets/spritesheet-rechts.png";
 
         genericForegroundObjects.forEach((object) => {
           object.position.x -= 5;
@@ -781,7 +834,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       } else if (keys.left.pressed) {
         scrollOffset -= 5;
-        player.image = createImage(kunststudentLinks);
 
         platforms.forEach((platform) => {
           platform.position.x += 5;
@@ -812,10 +864,12 @@ document.addEventListener("DOMContentLoaded", () => {
         ) {
           if (enemy.velocity > 0) {
             enemy.velocity = -enemy.velocity;
-            enemy.image = createImage(assiLinks);
+            enemy.currentSprite = enemy.sprites.run.left;
+            enemy.currentCropWidth = enemy.sprites.run.cropWidth;
           } else if (enemy.velocity < 0) {
             enemy.velocity = enemy.velocity * -1;
-            enemy.image = createImage(assiRechts);
+            enemy.currentSprite = enemy.sprites.run.right;
+            enemy.currentCropWidth = enemy.sprites.run.cropWidth;
           }
         }
       });
@@ -880,7 +934,8 @@ document.addEventListener("DOMContentLoaded", () => {
           player.position.y + player.height > bier.position.y
         ) {
           bierCounter++;
-          bierCounterOutput.innerHTML = `<span>${bierCounter}</span>`;
+          itemSound.play();
+          // bierCounterOutput.innerHTML = `<span>${bierCounter} BIERE</span>`;
           return false;
         }
         return true;
@@ -900,10 +955,10 @@ document.addEventListener("DOMContentLoaded", () => {
     enemies.forEach((enemy) => {
       // X-ACHSE
       if (
-        player.position.x < enemy.position.x + enemy.width &&
-        player.position.x + player.width > enemy.position.x &&
-        player.position.y < enemy.position.y + enemy.height &&
-        player.position.y + player.height > enemy.position.y
+        player.position.x < enemy.position.x + (enemy.width - 30) &&
+        player.position.x + (player.width - 30) > enemy.position.x &&
+        player.position.y < enemy.position.y + (enemy.height - 30) &&
+        player.position.y + (player.height - 30) > enemy.position.y
       ) {
         init();
       } else {
@@ -924,16 +979,25 @@ document.addEventListener("DOMContentLoaded", () => {
     switch (keyCode) {
       case 65:
         keys.left.pressed = true;
+        player.currentSprite = player.sprites.run.left;
+        player.currentCropWidth = player.sprites.run.cropWidth;
         break;
       case 37:
         keys.left.pressed = true;
+        player.currentSprite = player.sprites.run.left;
+        player.currentCropWidth = player.sprites.run.cropWidth;
         break;
       case 39:
         keys.right.pressed = true;
+        player.currentSprite = player.sprites.run.right;
+        player.currentCropWidth = player.sprites.run.cropWidth;
+        introText.style.display = "none";
         break;
       case 68:
         keys.right.pressed = true;
         player.currentSprite = player.sprites.run.right;
+        player.currentCropWidth = player.sprites.run.cropWidth;
+        introText.style.display = "none";
         break;
       case 87:
         if (player.velocity.y === 0) {
@@ -953,15 +1017,23 @@ document.addEventListener("DOMContentLoaded", () => {
     switch (keyCode) {
       case 65:
         keys.left.pressed = false;
+        player.currentSprite = player.sprites.stand.left;
+        player.currentCropWidth = player.sprites.stand.cropWidth;
         break;
       case 37:
         keys.left.pressed = false;
+        player.currentSprite = player.sprites.stand.left;
+        player.currentCropWidth = player.sprites.stand.cropWidth;
         break;
       case 39:
         keys.right.pressed = false;
+        player.currentSprite = player.sprites.stand.right;
+        player.currentCropWidth = player.sprites.stand.cropWidth;
         break;
       case 68:
         keys.right.pressed = false;
+        player.currentSprite = player.sprites.stand.right;
+        player.currentCropWidth = player.sprites.stand.cropWidth;
         break;
       case 87:
         player.velocity.y += 0;
@@ -975,5 +1047,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let button = document.querySelector("button");
   button.addEventListener("click", () => {
     music.play();
+  });
+
+  button.addEventListener("click", () => {
+    button.style.display = "none";
+    logo.style.display = "none";
+    init();
+
+    zeit.innerHTML = `${zeitCounter}`;
   });
 });
