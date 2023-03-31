@@ -203,8 +203,8 @@ document.addEventListener("DOMContentLoaded", () => {
       c,
     }),
     new Platform({
-      x: 7440,
-      y: 40,
+      x: 7640,
+      y: 136,
       image: createImage(handelshof),
       c,
     }),
