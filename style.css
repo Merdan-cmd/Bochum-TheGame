@@ -14,8 +14,8 @@
 
 :root {
   --text-color: rgb(255, 255, 255);
-  --shadow-color: hsla(233, 95%, 55%, 0.4);
-  --btn-color: hsl(232, 99%, 41%);
+  --shadow-color: hsla(233, 100%, 73%, 0.4);
+  --btn-color: #1717ff;
   --bg-color: #141218;
 }
 
@@ -35,14 +35,18 @@ body {
   background-color: var(--bg-color);
 }
 .logo {
-  width: 40vh;
+  max-width: 45vh;
   position: absolute;
-  top: 170px;
-  left: 40%;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -25%);
 }
 
 button {
   position: absolute;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -65%);
 
   padding: 10px 20px;
   border: none;
@@ -174,8 +178,9 @@ button::before {
 
   top: -360px;
   left: -640px;
-
-  height: 5vh;
+  width: 1280px;
+  height: 720px;
+  background-color: #b9b9b94f;
 }
 
 canvas {
@@ -189,4 +194,5 @@ canvas {
   color: #fff;
   width: 29vw;
   margin: 6vh 10vh;
+  display: none;
 }

@@ -102,36 +102,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ENEMIES
   let enemies = [
     new Enemy({
-      x: 900,
-      y: 240,
-      image: createImage(assiLinks),
-      velocity: -1,
-      c,
-    }),
-    new Enemy({
-      x: 1500,
-      y: 476,
-      image: createImage(assiRechts),
-      velocity: 2,
-      c,
-    }),
-
-    new Enemy({
-      x: 1200,
-      y: 476,
-      image: createImage(assiLinks),
-      velocity: -1,
-      c,
-    }),
-
-    new Enemy({
-      x: 3000,
-      y: 476,
-      image: createImage(assiLinks),
-      velocity: -3,
-      c,
-    }),
-    new Enemy({
       x: 3800,
       y: 476,
       image: createImage(assiRechts),
@@ -418,8 +388,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let scrollOffset = 0;
 
-    bierCounter = 0;
-    bierCounterOutput.innerHTML = bierCounter;
+    // bierCounter = 0;
+    // bierCounterOutput.innerHTML = bierCounter;
 
     enemies = [
       new Enemy({
@@ -519,6 +489,12 @@ document.addEventListener("DOMContentLoaded", () => {
         x: 7440,
         y: 549,
         image: createImage(plattformMed),
+        c,
+      }),
+      new Platform({
+        x: 7540,
+        y: 120,
+        image: createImage(handelshof),
         c,
       }),
 
@@ -703,15 +679,15 @@ document.addEventListener("DOMContentLoaded", () => {
         c,
       }),
       new GenericForeground({
-        x: 0,
+        x: -100,
         y: 50,
-        velocity: 2,
+        velocity: 0,
         image: createImage(rakete),
         id: "rakete",
         c,
       }),
       new GenericForeground({
-        x: 0,
+        x: 5000,
         y: 50,
         velocity: -2,
         image: createImage(ufo),
@@ -1044,6 +1020,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  let overlay = document.querySelector(".overlay");
+
   let button = document.querySelector("button");
   button.addEventListener("click", () => {
     music.play();
@@ -1052,8 +1030,8 @@ document.addEventListener("DOMContentLoaded", () => {
   button.addEventListener("click", () => {
     button.style.display = "none";
     logo.style.display = "none";
+    introText.style.display = "block";
+    overlay.style.backgroundColor = "transparent";
     init();
-
-    zeit.innerHTML = `${zeitCounter}`;
   });
 });
