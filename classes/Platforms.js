@@ -1,5 +1,5 @@
 class Platform {
-  constructor({ x, y, image, collision, id, c }) {
+  constructor({ x, y, image, collision, id, c, velocity }) {
     (this.position = {
       x,
       y,

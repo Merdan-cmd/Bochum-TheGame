@@ -7,12 +7,14 @@ import rakete from "./assets/Rakete.png";
 import hintergrund from "./assets/Hintergrund.png";
 import dach from "./assets/Dach-mit-Schild.png";
 import handelshof from "./assets/Handelshof.png";
+import bank from "./assets/Bank.png";
 import werkbank from "./assets/Werkbank-Tafel.png";
 import sbahn from "./assets/S-BAHN.png";
 import automatUkraine from "./assets/Automat__Ukraine.png";
 import rrx from "./assets/Zug.png";
 import gleise from "./assets/Gleise.png";
 import assiRechts from "./assets/Hat_man-rechts.png";
+import imbiss from "./assets/imbiss.png";
 import assiLinks from "./assets/Hat_man-links.png";
 import laterne from "./assets/Straßenlaterne.png";
 import bierTafel from "./assets/Bierwerbung.png";
@@ -42,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let music = new Audio("./assets/sounds/music.mp3");
   let itemSound = new Audio("./assets/sounds/beer.mp3");
   music.play();
-  music.volume = 0.3;
+  music.volume = 0.1;
 
   canvas.width = 1280;
   canvas.height = 720;
@@ -160,11 +162,11 @@ document.addEventListener("DOMContentLoaded", () => {
       c,
     }),
     new Platform({
-      x: 8690,
+      x: 9290,
       y: 510,
       image: createImage(rrxFährt),
-      c,
       id: "fährt",
+      c,
     }),
     new Platform({
       x: 7440,
@@ -172,10 +174,44 @@ document.addEventListener("DOMContentLoaded", () => {
       image: createImage(plattformMed),
       c,
     }),
+
+    new Platform({
+      x: 8040,
+      y: 549,
+      image: createImage(plattformMed),
+      c,
+    }),
     new Platform({
       x: 7640,
-      y: 136,
+      y: 490,
+      image: createImage(bank),
+      collision: true,
+      c,
+    }),
+    new Platform({
+      x: 7840,
+      y: 390,
+      image: createImage(imbiss),
+      c,
+    }),
+    new Platform({
+      x: 8240,
+      y: 220,
+      image: createImage(laterne),
+      c,
+    }),
+    new Platform({
+      x: 8540,
+      y: 220,
+      image: createImage(laterne),
+      c,
+    }),
+
+    new Platform({
+      x: 8740,
+      y: 165,
       image: createImage(handelshof),
+      collision: true,
       c,
     }),
 
@@ -202,29 +238,29 @@ document.addEventListener("DOMContentLoaded", () => {
       x: 2200,
       y: 217,
       image: createImage(laterne),
-      c,
       collision: true,
+      c,
     }),
     new Platform({
       x: 3200,
       y: 217,
       image: createImage(laterne),
-      c,
       collision: true,
+      c,
     }),
     new Platform({
       x: 4200,
       y: 217,
       image: createImage(laterne),
-      c,
       collision: true,
+      c,
     }),
     new Platform({
       x: 5200,
       y: 217,
       image: createImage(laterne),
-      c,
       collision: true,
+      c,
     }),
     new Platform({ x: 6200, y: 217, image: createImage(laterne), c }),
 
@@ -443,6 +479,20 @@ document.addEventListener("DOMContentLoaded", () => {
         velocity: -2,
         c,
       }),
+      new Enemy({
+        x: 8500,
+        y: 476,
+        image: createImage(assiLinks),
+        velocity: -2,
+        c,
+      }),
+      new Enemy({
+        x: 8400,
+        y: 476,
+        image: createImage(assiRechts),
+        velocity: 2,
+        c,
+      }),
     ];
     //PLATFORMS INIT FUNKTION
     //PLATFORMS INIT FUNKTION
@@ -479,7 +529,7 @@ document.addEventListener("DOMContentLoaded", () => {
         c,
       }),
       new Platform({
-        x: 8690,
+        x: 9290,
         y: 510,
         image: createImage(rrxFährt),
         id: "fährt",
@@ -491,10 +541,44 @@ document.addEventListener("DOMContentLoaded", () => {
         image: createImage(plattformMed),
         c,
       }),
+
       new Platform({
-        x: 7540,
-        y: 120,
+        x: 8040,
+        y: 549,
+        image: createImage(plattformMed),
+        c,
+      }),
+      new Platform({
+        x: 7640,
+        y: 490,
+        image: createImage(bank),
+        collision: true,
+        c,
+      }),
+      new Platform({
+        x: 7840,
+        y: 390,
+        image: createImage(imbiss),
+        c,
+      }),
+      new Platform({
+        x: 8240,
+        y: 220,
+        image: createImage(laterne),
+        c,
+      }),
+      new Platform({
+        x: 8540,
+        y: 220,
+        image: createImage(laterne),
+        c,
+      }),
+
+      new Platform({
+        x: 8740,
+        y: 165,
         image: createImage(handelshof),
+        collision: true,
         c,
       }),
 
@@ -595,6 +679,7 @@ document.addEventListener("DOMContentLoaded", () => {
       new Item({ x: 4800, y: 355, image: createImage(bierFlasche), c }),
       new Item({ x: 5990, y: 475, image: createImage(bierFlasche), c }),
       new Item({ x: 7290, y: 150, image: createImage(bierFlasche), c }),
+      new Item({ x: 8940, y: 70, image: createImage(bierFlasche), c }),
     ];
 
     genericObjects = [
@@ -720,6 +805,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     genericObjects.forEach((object) => {
       object.draw();
+      object.update();
     });
 
     genericForegroundObjects.forEach((object) => {
@@ -748,10 +834,14 @@ document.addEventListener("DOMContentLoaded", () => {
         platform.id === "fährt"
       ) {
         genericObjects.forEach((object) => {
-          object.position.x -= 0.6;
+          object.velocity -= 0.01;
+          console.log(object.position.x);
+          if (object.position.x <= -10200) {
+            object.velocity === 0;
+          }
         });
         genericForegroundObjects.forEach((object) => {
-          object.position.x -= 10;
+          object.position.x -= 8;
         });
       }
     });
@@ -786,6 +876,8 @@ document.addEventListener("DOMContentLoaded", () => {
       (keys.left.pressed && scrollOffset === 0 && player.position.x > 0)
     ) {
       player.velocity.x = -5;
+    } else if (keys.left.pressed && player.position.x < 600) {
+      player.velocity.x = 0;
     } else {
       player.velocity.x = 0;
       // Platform movement
@@ -805,7 +897,7 @@ document.addEventListener("DOMContentLoaded", () => {
           platform.position.x -= 5;
 
           genericObjects.forEach((object) => {
-            object.position.x -= 0.2;
+            object.position.x -= 0.17;
           });
         });
       } else if (keys.left.pressed) {

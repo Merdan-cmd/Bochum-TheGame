@@ -22,7 +22,7 @@ class Player {
 
     (this.image = image),
       (this.frames = 0),
-      (this.width = 50),
+      (this.width = 55),
       (this.height = 69);
 
     this.sprites = {

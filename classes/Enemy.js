@@ -28,13 +28,13 @@ class Enemy {
     this.sprites = {
       run: {
         right: createImage(spriteHatRunRight),
-        cropWidth: 69,
+        cropWidth: 70,
         left: createImage(spriteHatRunLeft),
-        cropWidth: 69,
+        cropWidth: 67,
       },
     };
     this.currentSprite = this.sprites.run.left;
-    this.currentCropWidth = 69;
+    this.currentCropWidth = 67;
     this.c = c;
     this.canvas = canvas;
     this.canvasHeight = canvasHeight;
