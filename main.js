@@ -1,4 +1,5 @@
 import platform from "./assets/Steig.png";
+import mauer from "./assets/Mauer.png";
 import platformMittel from "./assets/Bahnsteig-mittel.png";
 import platformKlein from "./assets/Bahnsteig-klein.png";
 import flugzeug from "./assets/Flugzeug.png";
@@ -29,6 +30,7 @@ import Player from "./classes/Player";
 import GenericObject from "./classes/GenericObjects";
 import Enemy from "./classes/Enemy";
 import Item from "./classes/Item";
+import Wall from "./classes/Wall";
 
 const button = document.querySelector("button");
 const logo = document.querySelector(".logo");
@@ -399,7 +401,14 @@ document.addEventListener("DOMContentLoaded", () => {
       c,
     }),
   ];
-
+  let wall = [
+    new Wall({
+      x: 0,
+      y: 370,
+      image: createImage(mauer),
+      c,
+    }),
+  ];
   // ####################
   // ####################
   // ####################
@@ -581,6 +590,13 @@ document.addEventListener("DOMContentLoaded", () => {
         collision: true,
         c,
       }),
+      new Platform({
+        x: 11240,
+        y: 549,
+        image: createImage(platformMittel),
+        collision: true,
+        c,
+      }),
 
       // new Platform({
       //   x: 9250,
@@ -690,6 +706,14 @@ document.addEventListener("DOMContentLoaded", () => {
         c,
       }),
     ];
+    wall = [
+      new Wall({
+        x: 0,
+        y: 370,
+        image: createImage(mauer),
+        c,
+      }),
+    ];
 
     genericForegroundObjects = [
       new GenericForeground({
@@ -759,7 +783,7 @@ document.addEventListener("DOMContentLoaded", () => {
       new GenericForeground({
         x: 0,
         y: 100,
-        velocity: 2,
+        velocity: 3,
         image: createImage(flugzeug),
         c,
       }),
@@ -807,6 +831,10 @@ document.addEventListener("DOMContentLoaded", () => {
       object.draw();
       object.update();
     });
+    wall.forEach((object) => {
+      object.draw();
+      object.update();
+    });
 
     genericForegroundObjects.forEach((object) => {
       object.draw();
@@ -842,6 +870,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         genericForegroundObjects.forEach((object) => {
           object.position.x -= 8;
+        });
+        wall.forEach((object) => {
+          object.image = "";
         });
       }
     });
@@ -884,6 +915,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (keys.right.pressed) {
         scrollOffset += 5;
 
+        wall.forEach((wall) => {
+          wall.position.x -= 5;
+        });
+
         genericForegroundObjects.forEach((object) => {
           object.position.x -= 5;
         }),
@@ -897,11 +932,14 @@ document.addEventListener("DOMContentLoaded", () => {
           platform.position.x -= 5;
 
           genericObjects.forEach((object) => {
-            object.position.x -= 0.17;
+            object.position.x -= 0.1;
           });
         });
       } else if (keys.left.pressed) {
         scrollOffset -= 5;
+        wall.forEach((wall) => {
+          wall.position.x += 5;
+        });
 
         platforms.forEach((platform) => {
           platform.position.x += 5;
@@ -910,7 +948,7 @@ document.addEventListener("DOMContentLoaded", () => {
           enemy.position.x += 5;
         });
         genericObjects.forEach((object) => {
-          object.position.x += 4;
+          object.position.x += 0.1;
         });
         genericForegroundObjects.forEach((object) => {
           object.position.x += 5;
