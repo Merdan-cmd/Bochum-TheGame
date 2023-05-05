@@ -180,7 +180,14 @@ button::before {
   left: -640px;
   width: 1280px;
   height: 720px;
-  background-color: #b9b9b94f;
+}
+
+.active {
+  background-color: #000000b1;
+}
+
+.end {
+  display: none;
 }
 
 canvas {

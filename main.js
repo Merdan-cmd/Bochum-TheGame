@@ -37,6 +37,7 @@ const logo = document.querySelector(".logo");
 const zeit = document.querySelector(".zeit");
 let zeitCounter = 0;
 const introText = document.querySelector(".text");
+const end = document.querySelector(".end");
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.querySelector("canvas");
@@ -214,6 +215,14 @@ document.addEventListener("DOMContentLoaded", () => {
       y: 165,
       image: createImage(handelshof),
       collision: true,
+      c,
+    }),
+    new Platform({
+      x: 11240,
+      y: 549,
+      image: createImage(platformMittel),
+      collision: true,
+      id: "wattenscheid",
       c,
     }),
 
@@ -433,8 +442,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let scrollOffset = 0;
 
-    // bierCounter = 0;
-    // bierCounterOutput.innerHTML = bierCounter;
+    bierCounter = 0;
+    bierCounterOutput.innerHTML = bierCounter;
 
     enemies = [
       new Enemy({
@@ -587,13 +596,6 @@ document.addEventListener("DOMContentLoaded", () => {
         x: 8740,
         y: 165,
         image: createImage(handelshof),
-        collision: true,
-        c,
-      }),
-      new Platform({
-        x: 11240,
-        y: 549,
-        image: createImage(platformMittel),
         collision: true,
         c,
       }),
@@ -806,6 +808,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
   }
 
+  const wat = platforms.find((platform) => platform.id === "wattenscheid");
+
   //Animate Funktion
 
   //Animate Funktion
@@ -823,6 +827,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //Animate Funktion
   function animate() {
     requestAnimationFrame(animate);
+    console.log(wat);
 
     c.fillStyle = "white";
     c.fillRect(0, 0, canvas.width, canvas.height);
@@ -843,6 +848,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     platforms.forEach((platform) => {
       platform.draw();
+      platform.update();
     });
     biere.forEach((bier) => {
       bier.draw();
@@ -854,6 +860,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     player.update();
 
+    //Wattenscheid
+    //Wattenscheid
+    //Wattenscheid
+    //Wattenscheid
+    //Wattenscheid
+    //Wattenscheid
+    //Wattenscheid
+    //Wattenscheid
+
     platforms.forEach((platform) => {
       if (
         player.position.x + player.width >=
@@ -862,17 +877,25 @@ document.addEventListener("DOMContentLoaded", () => {
         platform.id === "fährt"
       ) {
         genericObjects.forEach((object) => {
-          object.velocity -= 0.01;
-          console.log(object.position.x);
-          if (object.position.x <= -10200) {
-            object.velocity === 0;
+          object.velocity -= 0.02;
+
+          if (object.position.x <= -13000) {
+            object.velocity = 0;
           }
         });
         genericForegroundObjects.forEach((object) => {
-          object.position.x -= 8;
+          object.velocity -= 0.01;
+
+          genericObjects.forEach((element) => {
+            if (element.position.x <= -13000) {
+              object.velocity = 0;
+              overlay.classList.add("active");
+              end.style.display = "block";
+            }
+          });
         });
         wall.forEach((object) => {
-          object.image = "";
+          object.position.x -= 50;
         });
       }
     });
@@ -1041,7 +1064,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ) {
           bierCounter++;
           itemSound.play();
-          // bierCounterOutput.innerHTML = `<span>${bierCounter} BIERE</span>`;
+          bierCounterOutput.innerHTML = `<span>${bierCounter} BIERE</span>`;
           return false;
         }
         return true;
@@ -1066,7 +1089,15 @@ document.addEventListener("DOMContentLoaded", () => {
         player.position.y < enemy.position.y + (enemy.height - 30) &&
         player.position.y + (player.height - 30) > enemy.position.y
       ) {
-        init();
+        player.currentSprite = player.sprites.dead.right;
+        player.currentCropWidth = player.sprites.dead.cropWidth;
+        player.position.y += 10;
+        player.velocity.x = 0;
+        keys.left.pressed = false;
+        keys.right.pressed = false;
+        setTimeout(() => {
+          init();
+        }, 500);
       } else {
         console.log("no collision");
       }
@@ -1074,6 +1105,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   animate();
+
   // Check if Key is pressed
   // Check if Key is pressed
   // Check if Key is pressed
@@ -1150,6 +1182,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  var secondsLabel = document.getElementById("seconds");
+  var totalSeconds = 0;
+  setInterval(setTime, 1000);
+
+  function setTime() {
+    ++totalSeconds;
+    secondsLabel.innerHTML = pad(totalSeconds % 60);
+    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+  }
+
+  function pad(val) {
+    var valString = val + "";
+    if (valString.length < 2) {
+      return "0" + valString;
+    } else {
+      return valString;
+    }
+  }
+
   let overlay = document.querySelector(".overlay");
 
   let button = document.querySelector("button");
@@ -1161,7 +1212,7 @@ document.addEventListener("DOMContentLoaded", () => {
     button.style.display = "none";
     logo.style.display = "none";
     introText.style.display = "block";
-    overlay.style.backgroundColor = "transparent";
+    overlay.classList.remove("active");
     init();
   });
 });

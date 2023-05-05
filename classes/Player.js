@@ -3,6 +3,7 @@ import spriteRunRight from "../assets/spritesheet-rechts.png";
 import spriteStandRight from "../assets/SpriteStandRight.png";
 import spriteStandLeft from "../assets/SpriteStandLeft.png";
 import spriteRunLeft from "../assets/spritesheet-links.png";
+import dead from "../assets/Kunststudent-tot.png";
 function createImage(imageSrc) {
   const image = new Image();
   image.src = imageSrc;
@@ -10,7 +11,7 @@ function createImage(imageSrc) {
 }
 
 class Player {
-  constructor({ image, c, canvas, canvasHeight, canvasWidth }) {
+  constructor({ image, c, canvas, canvasHeight, canvasWidth, velocity }) {
     this.position = {
       x: 100,
       y: 479,
@@ -36,6 +37,10 @@ class Player {
         cropWidth: 50,
         left: createImage(spriteRunLeft),
         cropWidth: 50,
+      },
+      dead: {
+        right: createImage(dead),
+        cropWidth: 80,
       },
     };
     this.currentSprite = this.sprites.stand.right;
