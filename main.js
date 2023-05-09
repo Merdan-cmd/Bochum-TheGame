@@ -32,6 +32,8 @@ import Enemy from "./classes/Enemy";
 import Item from "./classes/Item";
 import Wall from "./classes/Wall";
 
+const punkte = document.querySelector(".punkte");
+const restart = document.querySelector(".restart");
 const button = document.querySelector("button");
 const logo = document.querySelector(".logo");
 const zeit = document.querySelector(".zeit");
@@ -891,11 +893,14 @@ document.addEventListener("DOMContentLoaded", () => {
               object.velocity = 0;
               overlay.classList.add("active");
               end.style.display = "block";
+              restart.style.display = "block";
+              punkte.classList.add("ende");
+              secondsLabel.classList.add("ende-seconds");
             }
           });
         });
         wall.forEach((object) => {
-          object.position.x -= 50;
+          object.position.x -= 40;
         });
       }
     });
@@ -1182,16 +1187,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  var secondsLabel = document.getElementById("seconds");
-  var totalSeconds = 0;
-  setInterval(setTime, 1000);
-
-  function setTime() {
-    ++totalSeconds;
-    secondsLabel.innerHTML = pad(totalSeconds % 60);
-    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
-  }
-
   function pad(val) {
     var valString = val + "";
     if (valString.length < 2) {
@@ -1201,11 +1196,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function setTime() {
+    ++totalSeconds;
+    secondsLabel.innerHTML = pad(totalSeconds % 60);
+    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+  }
+
+  var secondsLabel = document.getElementById("seconds");
+  var totalSeconds = 0;
+  setInterval(setTime, 1000);
+
   let overlay = document.querySelector(".overlay");
 
   let button = document.querySelector("button");
   button.addEventListener("click", () => {
     music.play();
+  });
+
+  restart.addEventListener("click", () => {
+    end.style.display = "none";
+    overlay.classList.remove("active");
+    restart.style.display = "none";
+    init();
   });
 
   button.addEventListener("click", () => {

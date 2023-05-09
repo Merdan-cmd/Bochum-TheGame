@@ -5,6 +5,31 @@
   font-weight: bolder;
   font-size: 26px;
   font-family: "Source Code Pro";
+  margin-left: 1rem;
+  text-shadow: 3px 2px 55px #000000;
+}
+
+.ende {
+  color: #fff;
+  position: absolute;
+  top: 55%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+}
+
+.ende-seconds {
+  color: #fff;
+  position: absolute;
+  top: 55%;
+  left: 40%;
+  font-size: 26px;
+  transform: translate(-50%, -50%);
+}
+
+#seconds {
+  margin-left: 1rem;
+  font-size: 20px;
+  text-shadow: 3px 3px 45px #000000;
 }
 
 .start {
@@ -182,8 +207,12 @@ button::before {
   height: 720px;
 }
 
+.restart {
+  display: none;
+}
+
 .active {
-  background-color: #000000b1;
+  background-color: #000000d1;
 }
 
 .end {
