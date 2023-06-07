@@ -12,8 +12,6 @@ class GenericObject {
   }
 
   draw() {
-    // c.fillStyle = "blue";
-    // c.fillRect(this.position.x, this.position.y, this.width, this.height);
     this.c.drawImage(this.image, this.position.x, this.position.y);
   }
 

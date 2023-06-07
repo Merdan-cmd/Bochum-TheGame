@@ -30,7 +30,7 @@ import Player from "./classes/Player";
 import GenericObject from "./classes/GenericObjects";
 import Enemy from "./classes/Enemy";
 import Item from "./classes/Item";
-import Wall from "./classes/Wall";
+// import Wall from "./classes/Wall";
 
 const punkte = document.querySelector(".punkte");
 const restart = document.querySelector(".restart");
@@ -74,12 +74,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   let bierCounter = 0;
   let bierCounterOutput = document.querySelector(".punkte");
+
   let player = new Player({
     c,
     canvas,
     canvasHeight,
     canvasWidth,
   });
+
   let scrollOffset = 0;
 
   //BIER
@@ -412,14 +414,14 @@ document.addEventListener("DOMContentLoaded", () => {
       c,
     }),
   ];
-  let wall = [
-    new Wall({
-      x: 0,
-      y: 370,
-      image: createImage(mauer),
-      c,
-    }),
-  ];
+  // let wall = [
+  //   new Wall({
+  //     x: 0,
+  //     y: 370,
+  //     image: createImage(mauer),
+  //     c,
+  //   }),
+  // ];
   // ####################
   // ####################
   // ####################
@@ -442,7 +444,7 @@ document.addEventListener("DOMContentLoaded", () => {
     music.play();
     music.volume = 0.3;
 
-    let scrollOffset = 0;
+    scrollOffset = 0;
 
     bierCounter = 0;
     bierCounterOutput.innerHTML = bierCounter;
@@ -549,7 +551,7 @@ document.addEventListener("DOMContentLoaded", () => {
         c,
       }),
       new Platform({
-        x: 9290,
+        x: 9190,
         y: 510,
         image: createImage(rrxFährt),
         id: "fährt",
@@ -563,7 +565,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }),
 
       new Platform({
-        x: 8040,
+        x: 7940,
         y: 549,
         image: createImage(plattformMed),
         c,
@@ -595,7 +597,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }),
 
       new Platform({
-        x: 8740,
+        x: 8690,
         y: 165,
         image: createImage(handelshof),
         collision: true,
@@ -710,14 +712,14 @@ document.addEventListener("DOMContentLoaded", () => {
         c,
       }),
     ];
-    wall = [
-      new Wall({
-        x: 0,
-        y: 370,
-        image: createImage(mauer),
-        c,
-      }),
-    ];
+    // wall = [
+    //   new Wall({
+    //     x: 0,
+    //     y: 370,
+    //     image: createImage(mauer),
+    //     c,
+    //   }),
+    // ];
 
     genericForegroundObjects = [
       new GenericForeground({
@@ -829,16 +831,11 @@ document.addEventListener("DOMContentLoaded", () => {
   //Animate Funktion
   function animate() {
     requestAnimationFrame(animate);
-    console.log(wat);
-
+    console.log(scrollOffset);
     c.fillStyle = "white";
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     genericObjects.forEach((object) => {
-      object.draw();
-      object.update();
-    });
-    wall.forEach((object) => {
       object.draw();
       object.update();
     });
@@ -878,6 +875,12 @@ document.addEventListener("DOMContentLoaded", () => {
         player.position.x <= platform.position.x + platform.width &&
         platform.id === "fährt"
       ) {
+        biere.forEach((bier) => {
+          if (bier.id === "zugBier") {
+            bier.velocity -= 3;
+          }
+        });
+
         genericObjects.forEach((object) => {
           object.velocity -= 0.02;
 
@@ -899,9 +902,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           });
         });
-        wall.forEach((object) => {
-          object.position.x -= 40;
-        });
+        // // wall.forEach((object) => {
+        // //   object.position.x -= 40;
+        // });
       }
     });
 
@@ -917,6 +920,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     });
+
+    console.log(player.currentSprite, player.currentCropWidth);
 
     // Player movement
     // Player movement
@@ -942,11 +947,6 @@ document.addEventListener("DOMContentLoaded", () => {
       // Platform movement
       if (keys.right.pressed) {
         scrollOffset += 5;
-
-        wall.forEach((wall) => {
-          wall.position.x -= 5;
-        });
-
         genericForegroundObjects.forEach((object) => {
           object.position.x -= 5;
         }),
@@ -956,18 +956,19 @@ document.addEventListener("DOMContentLoaded", () => {
           enemies.forEach((enemy) => {
             enemy.position.x -= 5;
           });
+
         platforms.forEach((platform) => {
           platform.position.x -= 5;
+        });
 
-          genericObjects.forEach((object) => {
-            object.position.x -= 0.1;
-          });
+        genericObjects.forEach((object) => {
+          object.position.x -= 4.5;
         });
       } else if (keys.left.pressed) {
         scrollOffset -= 5;
-        wall.forEach((wall) => {
-          wall.position.x += 5;
-        });
+        // wall.forEach((wall) => {
+        //   wall.position.x += 5;
+        // });
 
         platforms.forEach((platform) => {
           platform.position.x += 5;
@@ -976,7 +977,7 @@ document.addEventListener("DOMContentLoaded", () => {
           enemy.position.x += 5;
         });
         genericObjects.forEach((object) => {
-          object.position.x += 0.1;
+          object.position.x += 4.5;
         });
         genericForegroundObjects.forEach((object) => {
           object.position.x += 5;
@@ -1104,7 +1105,6 @@ document.addEventListener("DOMContentLoaded", () => {
           init();
         }, 500);
       } else {
-        console.log("no collision");
       }
     });
   }
@@ -1128,7 +1128,7 @@ document.addEventListener("DOMContentLoaded", () => {
       case 37:
         keys.left.pressed = true;
         player.currentSprite = player.sprites.run.left;
-        player.currentCropWidth = player.sprites.run.cropWidth;
+        player.currentCropWidth = player.sprites.run.left.cropWidth;
         break;
       case 39:
         keys.right.pressed = true;
@@ -1186,6 +1186,16 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
     }
   });
+  var minutesLabel = document.getElementById("minutes");
+  var secondsLabel = document.getElementById("seconds");
+  var totalSeconds = 0;
+  setInterval(setTime, 1000);
+
+  function setTime() {
+    ++totalSeconds;
+    secondsLabel.innerHTML = pad(totalSeconds % 60);
+    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+  }
 
   function pad(val) {
     var valString = val + "";
@@ -1195,16 +1205,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return valString;
     }
   }
-
-  function setTime() {
-    ++totalSeconds;
-    secondsLabel.innerHTML = pad(totalSeconds % 60);
-    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
-  }
-
-  var secondsLabel = document.getElementById("seconds");
-  var totalSeconds = 0;
-  setInterval(setTime, 1000);
 
   let overlay = document.querySelector(".overlay");
 
@@ -1217,6 +1217,8 @@ document.addEventListener("DOMContentLoaded", () => {
     end.style.display = "none";
     overlay.classList.remove("active");
     restart.style.display = "none";
+    punkte.classList.remove("ende");
+    secondsLabel.classList.remove("ende-seconds");
     init();
   });
 

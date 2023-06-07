@@ -1,5 +1,5 @@
 class Item {
-  constructor({ x, y, image, c }) {
+  constructor({ x, y, image, c, velocity, id }) {
     (this.position = {
       x,
       y,
@@ -10,12 +10,18 @@ class Item {
     this.c = c;
 
     this.collected = false;
+    this.velocity = velocity;
+    this.id = id;
   }
 
   draw() {
     // c.fillStyle = "blue";
     // c.fillRect(this.position.x, this.position.y, this.width, this.height);
     this.c.drawImage(this.image, this.position.x, this.position.y);
+  }
+
+  update() {
+    this.position.x += this.velocity;
   }
 }
 
