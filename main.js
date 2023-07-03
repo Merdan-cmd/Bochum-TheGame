@@ -33,6 +33,8 @@ import Item from "./classes/Item";
 
 // import Wall from "./classes/Wall";
 
+const mute = document.querySelector(".mute");
+const speaker = document.querySelector(".speaker");
 const punkte = document.querySelector(".punkte");
 const restart = document.querySelector(".restart");
 const button = document.querySelector("button");
@@ -51,6 +53,15 @@ document.addEventListener("DOMContentLoaded", () => {
   let jump = new Audio("./assets/sounds/jump.mp3");
   let music = new Audio("./assets/sounds/music.mp3");
   let itemSound = new Audio("./assets/sounds/beer.mp3");
+  let death = new Audio("./assets/sounds/death.mp3");
+  let ufoSound = new Audio("./assets/sounds/ufo.mp3");
+  let rocketSound = new Audio("./assets/sounds/rocket.mp3");
+
+  death.volume = 0.2;
+  ufoSound.volume = 0.2;
+  rocketSound.volume = 0.4;
+  itemSound.volume = 0.1;
+
   music.play();
   music.volume = 0.1;
 
@@ -150,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let platformImage = createImage(platform);
 
   let platforms = [
-    new Platform({ x: 2910, y: 423, image: createImage(sbahn), c }),
+    new Platform({ x: 2910, y: 423, image: createImage(sbahn), c, id: "bahn" }),
     new Platform({
       x: 4760,
       y: 423,
@@ -533,7 +544,13 @@ document.addEventListener("DOMContentLoaded", () => {
     platformImage = createImage(platform);
 
     platforms = [
-      new Platform({ x: 2910, y: 423, image: createImage(sbahn), c }),
+      new Platform({
+        x: 2910,
+        y: 423,
+        image: createImage(sbahn),
+        c,
+        id: "bahn",
+      }),
       new Platform({
         x: 4760,
         y: 423,
@@ -632,7 +649,7 @@ document.addEventListener("DOMContentLoaded", () => {
         image: createImage(platformKlein),
         c,
       }),
-      new Platform({ x: 0, y: 417, image: createImage(rrx), c }),
+      new Platform({ x: 0, y: 417, image: createImage(rrx), c, id: "bahn" }),
       new Platform({ x: 499, y: 317, image: createImage(dach), c }),
       new Platform({
         x: 2200,
@@ -845,6 +862,7 @@ document.addEventListener("DOMContentLoaded", () => {
         y: 50,
         velocity: -2,
         image: createImage(ufo),
+        id: "ufo",
 
         c,
       }),
@@ -898,6 +916,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
     player.update();
 
+    genericForegroundObjects.forEach((object) => {
+      if (
+        object.id === "ufo" &&
+        object.position.x + object.width <=
+          player.position.x + player.width + 100 &&
+        object.position.x >= player.position.x - 300
+      ) {
+        ufoSound.play();
+      } else if (
+        object.id === "rakete" &&
+        object.position.x + object.width >=
+          player.position.x + player.width - 100 &&
+        object.position.x <= player.position.x + 300
+      ) {
+        rocketSound.play();
+      }
+    });
+
+    // platforms.forEach((platform) => {
+    //   if (
+    //     player.position.y + player.height <= platform.position.y &&
+    //     player.position.y + player.height + player.velocity.y >=
+    //       platform.position.y &&
+    //     player.position.x >= platform.position.x &&
+    //     player.position.x >= platform.position.x + platform.width - 100 &&
+    //     platform.id === "bahn"
+    //   ) {
+    //     player.position.y += 1;
+    //   }
+    // });
+
     //Wattenscheid
     //Wattenscheid
     //Wattenscheid
@@ -935,15 +984,14 @@ document.addEventListener("DOMContentLoaded", () => {
               object.velocity = 0;
 
               textEnd.style.display = "block";
-              setTimeout(() => {
-                overlay.classList.add("active");
-                end.style.display = "none";
-                textEnd.style.display = "block";
 
-                restart.style.display = "block";
-                punkte.classList.add("ende");
-                secondsLabel.classList.add("ende-seconds");
-              }, 3000);
+              overlay.classList.add("active");
+              end.style.display = "none";
+              textEnd.style.display = "block";
+
+              restart.style.display = "block";
+              punkte.classList.add("ende");
+              secondsLabel.classList.add("ende-seconds");
             }
           });
         });
@@ -1152,6 +1200,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player.velocity.x = 0;
         keys.left.pressed = false;
         keys.right.pressed = false;
+        death.play();
         setTimeout(() => {
           init();
         }, 500);
@@ -1260,6 +1309,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  speaker.addEventListener("click", () => {
+    music.pause();
+    mute.style.display = "block";
+    speaker.style.display = "none";
+  });
+  mute.addEventListener("click", () => {
+    music.play();
+    speaker.style.display = "block";
+    mute.style.display = "none";
+  });
+
   let overlay = document.querySelector(".overlay");
 
   let button = document.querySelector("button");
@@ -1272,7 +1332,9 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.classList.remove("active");
     restart.style.display = "none";
     punkte.classList.remove("ende");
-    secondsLabel.classList.remove("ende-seconds");
+    // secondsLabel.classList.remove("ende-seconds");
+    textEnd.style.display = "none";
+    console.log(overlay);
     init();
   });
 

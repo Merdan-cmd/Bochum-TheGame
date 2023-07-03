@@ -5,6 +5,18 @@
   box-sizing: border-box;
 }
 
+.speaker {
+  width: 4.5em;
+  float: right;
+  padding: 1em;
+}
+.mute {
+  width: 4.5em;
+  float: right;
+  padding: 1em;
+  display: none;
+}
+
 .punkte {
   color: #000000;
   font-weight: bolder;
