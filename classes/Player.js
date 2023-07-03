@@ -15,7 +15,7 @@ class Player {
   constructor({ image, c, canvas, canvasHeight, canvasWidth, velocity }) {
     this.position = {
       x: 100,
-      y: 483,
+      y: 200,
     };
     this.velocity = {
       x: 0,
@@ -24,18 +24,18 @@ class Player {
 
     (this.image = image),
       (this.frames = 0),
-      (this.width = 69),
-      (this.height = 66);
+      (this.width = 66),
+      (this.height = 70);
 
     this.sprites = {
       stand: {
         right: createImage(spriteStandRight),
         left: createImage(spriteStandLeft),
-        cropWidth: 69,
+        cropWidth: 68,
       },
       run: {
         right: createImage(spriteRunRight),
-        cropWidth: 69,
+        cropWidth: 67.5,
         left: createImage(spriteRunLeft),
       },
       dead: {
@@ -44,7 +44,7 @@ class Player {
       },
     };
     this.currentSprite = this.sprites.stand.right;
-    this.currentCropWidth = 69;
+    this.currentCropWidth = 67.9;
     this.c = c;
     this.canvas = canvas;
     this.canvasHeight = canvasHeight;
@@ -54,10 +54,10 @@ class Player {
   draw() {
     this.c.drawImage(
       this.currentSprite,
-      this.currentCropWidth * Math.floor(this.frames / 15),
+      this.currentCropWidth * Math.floor(this.frames / 12),
       0,
       this.currentCropWidth,
-      70,
+      85,
       this.position.x,
       this.position.y,
       this.width,

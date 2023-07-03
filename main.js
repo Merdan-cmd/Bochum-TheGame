@@ -30,6 +30,7 @@ import Player from "./classes/Player";
 import GenericObject from "./classes/GenericObjects";
 import Enemy from "./classes/Enemy";
 import Item from "./classes/Item";
+
 // import Wall from "./classes/Wall";
 
 const punkte = document.querySelector(".punkte");
@@ -39,6 +40,7 @@ const logo = document.querySelector(".logo");
 const zeit = document.querySelector(".zeit");
 let zeitCounter = 0;
 const introText = document.querySelector(".text");
+const textEnd = document.querySelector(".text-ende");
 const end = document.querySelector(".end");
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -175,6 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
       id: "fährt",
       c,
     }),
+
     new Platform({
       x: 7440,
       y: 549,
@@ -545,6 +548,13 @@ document.addEventListener("DOMContentLoaded", () => {
         c,
       }),
       new Platform({
+        x: 10000,
+        y: 310,
+        image: createImage(laterne),
+        c,
+        id: "grenze",
+      }),
+      new Platform({
         x: 6050,
         y: 549,
         image: createImage(plattformMed),
@@ -702,6 +712,34 @@ document.addEventListener("DOMContentLoaded", () => {
       new Item({ x: 5990, y: 475, image: createImage(bierFlasche), c }),
       new Item({ x: 7290, y: 150, image: createImage(bierFlasche), c }),
       new Item({ x: 8940, y: 70, image: createImage(bierFlasche), c }),
+      new Item({
+        x: 12000,
+        y: 250,
+        image: createImage(bierFlasche),
+        c,
+        id: "zugBier",
+      }),
+      new Item({
+        x: 12200,
+        y: 300,
+        image: createImage(bierFlasche),
+        c,
+        id: "zugBier",
+      }),
+      new Item({
+        x: 12400,
+        y: 320,
+        image: createImage(bierFlasche),
+        c,
+        id: "zugBier",
+      }),
+      new Item({
+        x: 12600,
+        y: 260,
+        image: createImage(bierFlasche),
+        c,
+        id: "zugBier",
+      }),
     ];
 
     genericObjects = [
@@ -831,7 +869,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //Animate Funktion
   function animate() {
     requestAnimationFrame(animate);
-    console.log(scrollOffset);
+
     c.fillStyle = "white";
     c.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -877,7 +915,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ) {
         biere.forEach((bier) => {
           if (bier.id === "zugBier") {
-            bier.velocity -= 3;
+            bier.position.x -= 5;
           }
         });
 
@@ -894,17 +932,20 @@ document.addEventListener("DOMContentLoaded", () => {
           genericObjects.forEach((element) => {
             if (element.position.x <= -13000) {
               object.velocity = 0;
-              overlay.classList.add("active");
-              end.style.display = "block";
-              restart.style.display = "block";
-              punkte.classList.add("ende");
-              secondsLabel.classList.add("ende-seconds");
+
+              textEnd.style.display = "block";
+              setTimeout(() => {
+                overlay.classList.add("active");
+                end.style.display = "block";
+                textEnd.style.display = "none";
+
+                restart.style.display = "block";
+                punkte.classList.add("ende");
+                secondsLabel.classList.add("ende-seconds");
+              }, 3000);
             }
           });
         });
-        // // wall.forEach((object) => {
-        // //   object.position.x -= 40;
-        // });
       }
     });
 
@@ -920,8 +961,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     });
-
-    console.log(player.currentSprite, player.currentCropWidth);
 
     // Player movement
     // Player movement
@@ -987,6 +1026,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     }
+
+    platforms.forEach((platform) => {
+      if (
+        player.position.x < platform.position.x + platform.width &&
+        player.position.x + player.width > platform.position.x &&
+        player.position.y < platform.position.y + platform.height &&
+        player.position.y + player.height > platform.position.y &&
+        platform.id === "grenze"
+      ) {
+        if (keys.left.pressed) {
+          player.velocity.x = 0;
+          keys.left.pressed = false;
+        }
+      }
+    });
 
     enemies.forEach((enemy) => {
       platforms.forEach((platform) => {
@@ -1070,7 +1124,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ) {
           bierCounter++;
           itemSound.play();
-          bierCounterOutput.innerHTML = `<span>${bierCounter} BIERE</span>`;
+          bierCounterOutput.innerHTML = `<span>${bierCounter}</span> <img class="bier" src="./assets/Das-Bier.png" alt="" />`;
           return false;
         }
         return true;
@@ -1128,7 +1182,7 @@ document.addEventListener("DOMContentLoaded", () => {
       case 37:
         keys.left.pressed = true;
         player.currentSprite = player.sprites.run.left;
-        player.currentCropWidth = player.sprites.run.left.cropWidth;
+        player.currentCropWidth = player.sprites.run.cropWidth;
         break;
       case 39:
         keys.right.pressed = true;
@@ -1141,6 +1195,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player.currentSprite = player.sprites.run.right;
         player.currentCropWidth = player.sprites.run.cropWidth;
         introText.style.display = "none";
+        secondsLabel.style.display = "block";
         break;
       case 87:
         if (player.velocity.y === 0) {
@@ -1186,15 +1241,17 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
     }
   });
-  var minutesLabel = document.getElementById("minutes");
+
   var secondsLabel = document.getElementById("seconds");
   var totalSeconds = 0;
   setInterval(setTime, 1000);
 
   function setTime() {
     ++totalSeconds;
-    secondsLabel.innerHTML = pad(totalSeconds % 60);
-    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+    let seconds = pad(totalSeconds % 60);
+    let minutes = pad(parseInt(totalSeconds / 60));
+
+    secondsLabel.innerHTML = `<span>${minutes}:${seconds}</span>`;
   }
 
   function pad(val) {
