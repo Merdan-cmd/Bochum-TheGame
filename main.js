@@ -39,6 +39,7 @@ const button = document.querySelector("button");
 const logo = document.querySelector(".logo");
 const zeit = document.querySelector(".zeit");
 let zeitCounter = 0;
+let hasEnded = false;
 const introText = document.querySelector(".text");
 const textEnd = document.querySelector(".text-ende");
 const end = document.querySelector(".end");
@@ -550,7 +551,7 @@ document.addEventListener("DOMContentLoaded", () => {
       new Platform({
         x: 10000,
         y: 310,
-        image: createImage(laterne),
+        image: createImage(collisionBorder),
         c,
         id: "grenze",
       }),
@@ -936,8 +937,8 @@ document.addEventListener("DOMContentLoaded", () => {
               textEnd.style.display = "block";
               setTimeout(() => {
                 overlay.classList.add("active");
-                end.style.display = "block";
-                textEnd.style.display = "none";
+                end.style.display = "none";
+                textEnd.style.display = "block";
 
                 restart.style.display = "block";
                 punkte.classList.add("ende");
@@ -1003,11 +1004,8 @@ document.addEventListener("DOMContentLoaded", () => {
         genericObjects.forEach((object) => {
           object.position.x -= 4.5;
         });
-      } else if (keys.left.pressed) {
+      } else if (keys.left.pressed && !hasEnded) {
         scrollOffset -= 5;
-        // wall.forEach((wall) => {
-        //   wall.position.x += 5;
-        // });
 
         platforms.forEach((platform) => {
           platform.position.x += 5;
@@ -1027,6 +1025,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // TODO: MACH DASS DAS DING DYNAMISCHER FUNKTIONIERT FLAG TOGGLEN WENN COLLISIONBORDER
+
     platforms.forEach((platform) => {
       if (
         player.position.x < platform.position.x + platform.width &&
@@ -1035,10 +1035,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player.position.y + player.height > platform.position.y &&
         platform.id === "grenze"
       ) {
-        if (keys.left.pressed) {
-          player.velocity.x = 0;
-          keys.left.pressed = false;
-        }
+        if (keys.left.pressed) hasEnded = true;
       }
     });
 
