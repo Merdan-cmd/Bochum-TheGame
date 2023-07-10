@@ -2,7 +2,7 @@ import spriteRunRight from "../assets/spritesheet-rechts.png";
 import spriteStandRight from "../assets/SpriteStandRight.png";
 import spriteStandLeft from "../assets/SpriteStandLeft.png";
 import spriteRunLeft from "../assets/spritesheet-links.png";
-import dead from "../assets/Kunststudent-tot.png";
+import dead from "../assets/dead.png";
 const gravity = 1.5;
 
 function createImage(imageSrc) {
@@ -40,7 +40,7 @@ class Player {
       },
       dead: {
         right: createImage(dead),
-        cropWidth: 80,
+        cropWidth: 77,
       },
     };
     this.currentSprite = this.sprites.stand.right;

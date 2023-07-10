@@ -20,7 +20,7 @@
 .punkte {
   color: #000000;
   font-weight: bolder;
-  font-size: 26px;
+  font-size: 30px;
   font-family: "Source Code Pro";
   margin-left: 1rem;
   text-shadow: 3px 2px 55px #000000;
@@ -33,7 +33,7 @@
 .ende {
   color: #fff;
   position: absolute;
-  top: 55%;
+  top: 45%;
   left: 55%;
   transform: translate(-50%, -50%);
 }
@@ -41,15 +41,15 @@
 .ende-seconds {
   color: #fff;
   position: absolute;
-  top: 55%;
-  left: 40%;
-  font-size: 26px;
-  transform: translate(-50%, -50%);
+  top: 45%;
+  left: 43%;
+  font-size: 30px;
+  transform: translate(-55%, -50%);
 }
 
 .time {
   margin-left: 1rem;
-  font-size: 20px;
+  font-size: 28px;
   text-shadow: 3px 3px 45px #000000;
   display: none;
 }
@@ -57,12 +57,13 @@
 .start {
   position: absolute;
 }
+
 /*# sourceMappingURL=style.css.map */
 
 :root {
   --text-color: rgb(255, 255, 255);
-  --shadow-color: hsla(233, 100%, 73%, 0.4);
-  --btn-color: #d1af08;
+  --shadow-color: #1b59d774;
+  --btn-color: #070fad;
   --bg-color: #141218;
 }
 
@@ -170,8 +171,7 @@ button .left:hover ~ .right::after {
   transform: translate(0, -50%) rotate(7deg);
 }
 
-/* bubbles */
-button::before {
+bubbles button::before {
   content: "";
   pointer-events: none;
   opacity: 0.6;
@@ -216,7 +216,6 @@ button::before {
     transform: translate(0, -66.666%);
   }
 }
-
 .container {
   position: relative;
 }
@@ -233,6 +232,7 @@ button::before {
 
 .restart {
   display: none;
+  top: 65%;
 }
 
 .active {
@@ -257,14 +257,18 @@ canvas {
   display: none;
 }
 
-.text-ende {
-  color: #fff;
-  width: 29vw;
-  margin: 6vh 10vh;
-  display: none;
-}
-
 .bier {
   width: 18px;
   margin-block: 10px;
+}
+
+.information {
+  background-color: #d0d0d0d8;
+  width: 200px;
+
+  border-bottom-right-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  display: none;
 }

@@ -40,11 +40,13 @@ const restart = document.querySelector(".restart");
 const button = document.querySelector("button");
 const logo = document.querySelector(".logo");
 const zeit = document.querySelector(".zeit");
+const info = document.querySelector(".information");
 let zeitCounter = 0;
 let hasEnded = false;
 const introText = document.querySelector(".text");
-const textEnd = document.querySelector(".text-ende");
+const textEnd = document.querySelector("#endtext");
 const end = document.querySelector(".end");
+let gameRuns = true;
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.querySelector("canvas");
@@ -52,18 +54,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let jump = new Audio("./assets/sounds/jump.mp3");
   let music = new Audio("./assets/sounds/music.mp3");
-  let itemSound = new Audio("./assets/sounds/beer.mp3");
+  let itemSound = new Audio("./assets/sounds/drink.mp3");
   let death = new Audio("./assets/sounds/death.mp3");
   let ufoSound = new Audio("./assets/sounds/ufo.mp3");
   let rocketSound = new Audio("./assets/sounds/rocket.mp3");
+  let trainSound = new Audio("./assets/sounds/train.mp3");
+  // let loseSound = new Audio("./assets/sounds/laugh.mp3");
 
   death.volume = 0.2;
   ufoSound.volume = 0.2;
   rocketSound.volume = 0.4;
-  itemSound.volume = 0.1;
+  itemSound.volume = 1;
+  trainSound.volume = 0.9;
 
   music.play();
-  music.volume = 0.1;
+  music.volume = 0.08;
 
   canvas.width = 1280;
   canvas.height = 720;
@@ -86,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     image.src = imageSrc;
     return image;
   }
-  let bierCounter = 0;
+  let bierCounter;
   let bierCounterOutput = document.querySelector(".punkte");
 
   let player = new Player({
@@ -920,32 +925,32 @@ document.addEventListener("DOMContentLoaded", () => {
       if (
         object.id === "ufo" &&
         object.position.x + object.width <=
-          player.position.x + player.width + 100 &&
+          player.position.x + player.width + 400 &&
         object.position.x >= player.position.x - 300
       ) {
         ufoSound.play();
       } else if (
         object.id === "rakete" &&
         object.position.x + object.width >=
-          player.position.x + player.width - 100 &&
+          player.position.x + player.width - 150 &&
         object.position.x <= player.position.x + 300
       ) {
         rocketSound.play();
       }
     });
 
-    // platforms.forEach((platform) => {
-    //   if (
-    //     player.position.y + player.height <= platform.position.y &&
-    //     player.position.y + player.height + player.velocity.y >=
-    //       platform.position.y &&
-    //     player.position.x >= platform.position.x &&
-    //     player.position.x >= platform.position.x + platform.width - 100 &&
-    //     platform.id === "bahn"
-    //   ) {
-    //     player.position.y += 1;
-    //   }
-    // });
+    platforms.forEach((platform) => {
+      if (
+        platform.id === "bahn" &&
+        player.position.y + player.height <= platform.position.y &&
+        player.position.y + player.height + player.velocity.y >=
+          platform.position.y &&
+        player.position.x >= platform.position.x + platform.width - 50 &&
+        player.position.x <= platform.position.x + platform.width
+      ) {
+        player.position.y += 1;
+      }
+    });
 
     //Wattenscheid
     //Wattenscheid
@@ -963,6 +968,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player.position.x <= platform.position.x + platform.width &&
         platform.id === "fährt"
       ) {
+        trainSound.play();
         biere.forEach((bier) => {
           if (bier.id === "zugBier") {
             bier.position.x -= 5;
@@ -979,19 +985,31 @@ document.addEventListener("DOMContentLoaded", () => {
         genericForegroundObjects.forEach((object) => {
           object.velocity -= 0.01;
 
+          if (gameRuns === false) {
+            object.velocity = 0;
+            trainSound.pause();
+          }
+
           genericObjects.forEach((element) => {
-            if (element.position.x <= -13000) {
+            if (element.position.x <= -13000 && gameRuns) {
+              gameRuns = false;
               object.velocity = 0;
 
-              textEnd.style.display = "block";
+              game = false;
 
-              overlay.classList.add("active");
-              end.style.display = "none";
               textEnd.style.display = "block";
+              info.style.display = "none";
+              speaker.style.display = "none";
 
-              restart.style.display = "block";
-              punkte.classList.add("ende");
-              secondsLabel.classList.add("ende-seconds");
+              setTimeout(() => {
+                overlay.classList.add("active");
+                end.style.display = "block";
+                textEnd.style.display = "none";
+                restart.style.display = "block";
+                info.style.display = "flex";
+                punkte.classList.add("ende");
+                secondsLabel.classList.add("ende-seconds");
+              }, 4000);
             }
           });
         });
@@ -1073,8 +1091,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // TODO: MACH DASS DAS DING DYNAMISCHER FUNKTIONIERT FLAG TOGGLEN WENN COLLISIONBORDER
-
     platforms.forEach((platform) => {
       if (
         player.position.x < platform.position.x + platform.width &&
@@ -1140,6 +1156,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (player.position.y > canvas.height) {
       init();
+      death.play();
     }
     // Bier Collision
     // Bier Collision
@@ -1158,6 +1175,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Bier Collision
     // Bier Collision
     // Bier Collision
+    bierCounterOutput.innerHTML = `<span>${bierCounter}</span> <img class="bier" src="./assets/Das-Bier.png" alt="" />`;
+
     biere = biere.filter((bier) => {
       // Bier Collision
       {
@@ -1235,6 +1254,8 @@ document.addEventListener("DOMContentLoaded", () => {
         player.currentSprite = player.sprites.run.right;
         player.currentCropWidth = player.sprites.run.cropWidth;
         introText.style.display = "none";
+        info.style.display = "flex";
+        secondsLabel.style.display = "flex";
         break;
       case 68:
         keys.right.pressed = true;
@@ -1242,6 +1263,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player.currentCropWidth = player.sprites.run.cropWidth;
         introText.style.display = "none";
         secondsLabel.style.display = "block";
+        info.style.display = "flex";
         break;
       case 87:
         if (player.velocity.y === 0) {
@@ -1288,16 +1310,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  let game = true;
+
   var secondsLabel = document.getElementById("seconds");
   var totalSeconds = 0;
   setInterval(setTime, 1000);
 
   function setTime() {
-    ++totalSeconds;
-    let seconds = pad(totalSeconds % 60);
-    let minutes = pad(parseInt(totalSeconds / 60));
-
-    secondsLabel.innerHTML = `<span>${minutes}:${seconds}</span>`;
+    if (game) {
+      ++totalSeconds;
+      let seconds = pad(totalSeconds % 60);
+      let minutes = pad(parseInt(totalSeconds / 60));
+      secondsLabel.innerHTML = `<span>${minutes}:${seconds}</span>`;
+    }
   }
 
   function pad(val) {
@@ -1320,13 +1345,6 @@ document.addEventListener("DOMContentLoaded", () => {
     mute.style.display = "none";
   });
 
-  let overlay = document.querySelector(".overlay");
-
-  let button = document.querySelector("button");
-  button.addEventListener("click", () => {
-    music.play();
-  });
-
   restart.addEventListener("click", () => {
     end.style.display = "none";
     overlay.classList.remove("active");
@@ -1335,7 +1353,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // secondsLabel.classList.remove("ende-seconds");
     textEnd.style.display = "none";
     console.log(overlay);
+    secondsLabel.classList.remove("ende-seconds");
+    speaker.style.display = "block";
+    totalSeconds = 0;
+    game = true;
+    music.currentTime = 0;
     init();
+  });
+
+  let overlay = document.querySelector(".overlay");
+
+  let button = document.querySelector("button");
+  button.addEventListener("click", () => {
+    music.play();
   });
 
   button.addEventListener("click", () => {

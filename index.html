@@ -12,7 +12,12 @@
       <div class="overlay active">
         <div><img class="text" src="./assets/Text.png" alt="" /></div>
         <div>
-          <img class="text-ende" src="./assets/Textfeld-ende.png" alt="" />
+          <img
+            class="text"
+            id="endtext"
+            src="./assets/Textfeld-ende.png"
+            alt=""
+          />
         </div>
         <button style="--content: 'START'">
           <div class="left"></div>
@@ -26,16 +31,17 @@
         <img class="logo" src="./assets/Logo_1.png" alt="" />
         <img class="logo end" src="./assets/end.png" alt="" />
 
-        <button class="restart" style="--content: 'RESTART'">
-          <div class="left"></div>
-          RESTART
-          <div class="right"></div>
-        </button>
         <div class="information">
           <div class="punkte"></div>
 
           <label class="time" id="seconds"></label>
         </div>
+
+        <button class="restart" style="--content: 'RESTART'">
+          <div class="left"></div>
+          RESTART
+          <div class="right"></div>
+        </button>
 
         <!-- <div class="zeit"><span>0</span></div> -->
       </div>
