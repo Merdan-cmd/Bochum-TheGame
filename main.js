@@ -1,5 +1,5 @@
 import platform from "./assets/Steig.png";
-import mauer from "./assets/Mauer.png";
+
 import platformMittel from "./assets/Bahnsteig-mittel.png";
 import platformKlein from "./assets/Bahnsteig-klein.png";
 import flugzeug from "./assets/Flugzeug.png";
@@ -48,10 +48,10 @@ const textEnd = document.querySelector("#endtext");
 const end = document.querySelector(".end");
 let gameRuns = true;
 
+var bierContentLoaded = false;
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.querySelector("canvas");
   const c = canvas.getContext("2d");
-
   let jump = new Audio("./assets/sounds/jump.mp3");
   let music = new Audio("./assets/sounds/music.mp3");
   let itemSound = new Audio("./assets/sounds/drink.mp3");
@@ -993,9 +993,8 @@ document.addEventListener("DOMContentLoaded", () => {
           genericObjects.forEach((element) => {
             if (element.position.x <= -13000 && gameRuns) {
               gameRuns = false;
-              object.velocity = 0;
-
               game = false;
+              object.velocity = 0;
 
               textEnd.style.display = "block";
               info.style.display = "none";
@@ -1175,7 +1174,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Bier Collision
     // Bier Collision
     // Bier Collision
-    bierCounterOutput.innerHTML = `<span>${bierCounter}</span> <img class="bier" src="./assets/Das-Bier.png" alt="" />`;
+    bierCounterOutput.innerHTML = `<span>${bierCounter}</span> <img class="bier" src="${
+      createImage(bierFlasche).src
+    }" alt="" />`;
 
     biere = biere.filter((bier) => {
       // Bier Collision
@@ -1188,7 +1189,9 @@ document.addEventListener("DOMContentLoaded", () => {
         ) {
           bierCounter++;
           itemSound.play();
-          bierCounterOutput.innerHTML = `<span>${bierCounter}</span> <img class="bier" src="./assets/Das-Bier.png" alt="" />`;
+          bierCounterOutput.innerHTML = `<span>${bierCounter}</span> <img class="bier" src="${
+            createImage(bierFlasche).src
+          }" />`;
           return false;
         }
         return true;
@@ -1310,7 +1313,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  let game = true;
+  let game = false;
 
   var secondsLabel = document.getElementById("seconds");
   var totalSeconds = 0;
@@ -1357,7 +1360,9 @@ document.addEventListener("DOMContentLoaded", () => {
     speaker.style.display = "block";
     totalSeconds = 0;
     game = true;
+    gameRuns = true;
     music.currentTime = 0;
+    hasEnded = false;
     init();
   });
 
@@ -1369,6 +1374,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   button.addEventListener("click", () => {
+    game = true;
     button.style.display = "none";
     logo.style.display = "none";
     introText.style.display = "block";
