@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
   trainSound.volume = 0.9;
 
   music.play();
+  music.loop = true;
   music.volume = 0.08;
 
   canvas.width = 1280;
@@ -999,6 +1000,7 @@ document.addEventListener("DOMContentLoaded", () => {
               textEnd.style.display = "block";
               info.style.display = "none";
               speaker.style.display = "none";
+              info.style.display = "none";
 
               setTimeout(() => {
                 overlay.classList.add("active");
